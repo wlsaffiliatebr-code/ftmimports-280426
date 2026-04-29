@@ -1,0 +1,6 @@
+{
+  "redirects": [
+    { "source": "/", "destination": "/ftmimports", "permanent": false }
+  ],
+  "cleanUrls": true
+}
