@@ -141,29 +141,13 @@
       margin-bottom: 12px;
       align-self: flex-start;
     }
-    .code-display {
-      background: #f4f7ff;
-      border: 1px solid #dfe7ff;
-      border-radius: 8px;
-      padding: 12px;
-      text-align: center;
-      margin: 8px 0 14px;
-    }
-    .code-label {
-      display: block;
-      font-size: 10px;
-      color: #888;
-      font-weight: 600;
-      letter-spacing: 1.5px;
-      margin-bottom: 4px;
-      text-transform: uppercase;
-    }
-    .code-value {
+    .card-ref {
       font-family: 'SF Mono', Monaco, 'Courier New', monospace;
-      font-size: 18px;
-      font-weight: 700;
-      color: #3483fa;
-      letter-spacing: 1px;
+      font-size: 10px;
+      color: #c4c4c4;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+      margin-bottom: 14px;
     }
     .whatsapp-btn {
       margin-top: auto;
@@ -318,10 +302,7 @@
         ? '<div class="quantity-badge">✅ ' + item.quantity + ' unidades disponíveis</div>'
         : '';
 
-      const codeBlock = '<div class="code-display">' +
-                          '<span class="code-label">🔐 Código</span>' +
-                          '<span class="code-value">' + escapeHtml(item.code) + '</span>' +
-                        '</div>';
+      const codeBlock = '<div class="card-ref">Ref: ' + escapeHtml(item.code) + '</div>';
 
       const wppMsg = buildWhatsAppMessage(item);
       const wppLink = 'https://wa.me/' + data.whatsapp + '?text=' + encodeURIComponent(wppMsg);
@@ -344,8 +325,7 @@
       const battery = isApple && item.bateria !== null ? ' (Bateria ' + item.bateria + '%)' : '';
       const desc = item.modelo + ' ' + capitalize(item.cor) + battery;
       return 'Olá! Tenho interesse no ' + desc +
-             '. Código: ' + item.code +
-             '. Pode me passar o valor?';
+             '. Pode me passar o valor?\n\nRef: ' + item.code;
     }
 
     function capitalize(s) {
