@@ -3,227 +3,120 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Estoque de Celulares</title>
+  <title>FTM Imports · Estoque de Celulares</title>
   <meta name="description" content="Estoque atualizado em tempo real de iPhones e celulares Android. Atendimento via WhatsApp.">
-  <meta property="og:title" content="Estoque de Celulares">
-  <meta property="og:description" content="Atualizado em tempo real · iPhones e Androids · Atendimento via WhatsApp">
+  <meta property="og:title" content="FTM Imports · Estoque de Celulares">
+  <meta property="og:description" content="Atualizado em tempo real · iPhones e Androids · WhatsApp">
   <meta property="og:type" content="website">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📱</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%2280%22 height=%2280%22 x=%2210%22 y=%2210%22 fill=%22%23F0C020%22 stroke=%22%23121212%22 stroke-width=%228%22/></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Outfit', 'sans-serif'] },
+          colors: {
+            bg: '#F0F0F0',
+            ink: '#121212',
+            blue: '#1040C0',
+            yellow: '#F0C020',
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { background: #ebebeb; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-      color: #333;
-      line-height: 1.4;
-      min-height: 100vh;
-      padding-bottom: 32px;
+    body { font-family: 'Outfit', sans-serif; background: #F0F0F0; color: #121212; }
+    /* Press effect for buttons (translate + remove shadow) */
+    .press { transition: transform .15s ease-out, box-shadow .15s ease-out, background-color .15s ease-out; }
+    .press:active { transform: translate(2px, 2px); box-shadow: none !important; }
+    /* Card hover lift */
+    .lift { transition: transform .2s ease-out, box-shadow .2s ease-out; }
+    .lift:hover { transform: translate(-2px, -4px); box-shadow: 12px 12px 0 0 #121212; }
+    /* Dot grid background pattern for header */
+    .dot-grid {
+      background-image: radial-gradient(#12121215 1.5px, transparent 1.5px);
+      background-size: 18px 18px;
     }
-    .header {
-      background: #fff;
-      padding: 16px 0 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    .brand {
-      text-align: center;
-      margin-bottom: 12px;
-    }
-    .brand-name {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: 1px;
-      color: #222;
-    }
-    .brand-tagline {
-      font-size: 11px;
-      color: #888;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-top: 2px;
-    }
-    .header .subtitle {
-      font-size: 12px;
-      color: #888;
-      text-align: center;
-      margin-bottom: 12px;
-    }
-    .toggle, .search-wrap {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 16px;
-    }
-    .toggle {
-      display: flex;
-      gap: 8px;
-    }
-    .toggle button {
-      flex: 1;
-      padding: 12px;
-      border: 2px solid #d0d0d0;
-      background: #fff;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.15s;
-      color: #555;
-      font-family: inherit;
-    }
-    .toggle button.active {
-      background: #3483fa;
-      color: #fff;
-      border-color: #3483fa;
-    }
-    .toggle button:not(.active):hover { border-color: #999; }
-    .search-wrap { margin-top: 10px; }
-    .search-wrap input {
-      width: 100%;
-      padding: 12px 16px;
-      border: 1px solid #d0d0d0;
-      border-radius: 8px;
-      font-size: 15px;
-      font-family: inherit;
-      outline: none;
-    }
-    .search-wrap input:focus { border-color: #3483fa; }
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 16px;
-    }
-    .count {
-      font-size: 13px;
-      color: #666;
-      margin-bottom: 12px;
-      padding: 0 4px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 12px;
-    }
-    .card {
-      background: #fff;
-      border-radius: 8px;
-      padding: 16px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.15s, box-shadow 0.15s;
-      min-height: 220px;
-    }
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-    }
-    .card-modelo {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 4px;
-      color: #222;
-    }
-    .card-meta {
-      font-size: 13px;
-      color: #666;
-      margin-bottom: 8px;
-    }
-    .quantity-badge {
-      display: inline-block;
-      background: #e6f7ea;
-      color: #00a650;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 12px;
-      margin-bottom: 12px;
-      align-self: flex-start;
-    }
-    .card-ref {
-      font-family: 'SF Mono', Monaco, 'Courier New', monospace;
-      font-size: 10px;
-      color: #c4c4c4;
-      letter-spacing: 0.5px;
-      margin-top: 4px;
-      margin-bottom: 14px;
-    }
-    .whatsapp-btn {
-      margin-top: auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      background: #25d366;
-      color: #fff;
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 14px;
-      text-decoration: none;
-      transition: background 0.15s;
-    }
-    .whatsapp-btn:hover { background: #1fbe5a; }
-    .whatsapp-btn svg { width: 18px; height: 18px; fill: currentColor; }
-    .empty, .loading {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 60px 20px;
-      color: #888;
-      font-size: 14px;
-    }
-    .footer {
-      text-align: center;
-      padding: 24px 16px 8px;
-      font-size: 11px;
-      color: #999;
-    }
-    .refresh-btn {
-      background: none;
-      border: none;
-      color: #3483fa;
-      font-size: 12px;
-      cursor: pointer;
-      text-decoration: underline;
-      font-family: inherit;
-      padding: 4px 8px;
-    }
-    @media (max-width: 480px) {
-      .grid { grid-template-columns: 1fr; }
-      .brand-name { font-size: 18px; }
-      .code-value { font-size: 16px; }
-    }
+    /* Hide scrollbar on overflow scroll  */
+    .scroll-clean::-webkit-scrollbar { display: none; }
   </style>
 </head>
-<body>
-  <header class="header">
-    <div class="brand">
-      <div class="brand-name">Estoque de Celulares</div>
-      <div class="brand-tagline">Atualizado em tempo real</div>
-    </div>
-    <div class="subtitle" id="subtitle">Carregando…</div>
-    <div class="toggle">
-      <button id="btn-apple"  class="active" onclick="setBrand('apple')">🍎 Apple</button>
-      <button id="btn-xiaomi"               onclick="setBrand('xiaomi')">📱 Xiaomi / Android</button>
-    </div>
-    <div class="search-wrap">
-      <input type="search" id="search" placeholder="🔍 Buscar modelo, cor…" oninput="render()">
+<body class="min-h-screen bg-bg text-ink">
+
+  <!-- ============ HEADER ============ -->
+  <header class="bg-white border-b-4 border-ink sticky top-0 z-50 dot-grid">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+
+      <!-- Logo + Title row -->
+      <div class="flex items-center gap-4 sm:gap-6 mb-4 sm:mb-6">
+        <!-- LOGO FTM (yellow front + blue 3D + black outlines) -->
+        <a href="/" class="flex-shrink-0 group">
+          <svg viewBox="0 0 130 80" class="h-14 sm:h-16 lg:h-20 w-auto" xmlns="http://www.w3.org/2000/svg" aria-label="FTM">
+            <!-- Blue depth layer (offset behind) -->
+            <text x="16" y="66" font-family="Outfit, sans-serif" font-weight="900" font-size="72" letter-spacing="-4"
+                  fill="#1040C0" stroke="#121212" stroke-width="2" stroke-linejoin="round">FTM</text>
+            <!-- Yellow front layer -->
+            <text x="10" y="60" font-family="Outfit, sans-serif" font-weight="900" font-size="72" letter-spacing="-4"
+                  fill="#F0C020" stroke="#121212" stroke-width="2" stroke-linejoin="round">FTM</text>
+          </svg>
+        </a>
+
+        <div class="flex-1 min-w-0">
+          <h1 class="text-2xl sm:text-3xl lg:text-5xl font-black uppercase leading-[0.9] tracking-tighter">
+            Estoque de<br>Celulares
+          </h1>
+          <p class="text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] mt-1 sm:mt-2 text-ink/70" id="subtitle">
+            Atualizado em tempo real
+          </p>
+        </div>
+      </div>
+
+      <!-- Toggle Apple / Xiaomi -->
+      <div class="grid grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4">
+        <button id="btn-apple" onclick="setBrand('apple')"
+                class="press bg-yellow text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-2.5 sm:py-3 px-3 font-black uppercase tracking-wider text-sm sm:text-base">
+          🍎 Apple
+        </button>
+        <button id="btn-xiaomi" onclick="setBrand('xiaomi')"
+                class="press bg-white text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-2.5 sm:py-3 px-3 font-black uppercase tracking-wider text-sm sm:text-base">
+          📱 Xiaomi
+        </button>
+      </div>
+
+      <!-- Search -->
+      <div class="relative">
+        <input type="search" id="search" oninput="render()"
+               placeholder="BUSCAR MODELO, COR..."
+               class="w-full px-4 py-2.5 sm:py-3 bg-white border-2 sm:border-4 border-ink font-bold uppercase tracking-wide text-sm sm:text-base placeholder:text-ink/40 focus:outline-none focus:shadow-[4px_4px_0px_0px_#121212] transition-shadow">
+      </div>
     </div>
   </header>
 
-  <main class="container">
-    <div class="count" id="count"></div>
-    <div id="grid" class="grid">
-      <div class="loading">Carregando estoque…</div>
+  <!-- ============ MAIN ============ -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
+    <div id="count" class="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] mb-4 sm:mb-6"></div>
+    <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6 lg:gap-7">
+      <div class="col-span-full text-center py-20 font-black uppercase tracking-[0.2em] text-ink/40">
+        Carregando estoque...
+      </div>
     </div>
   </main>
 
-  <footer class="footer">
-    <span id="footerText">—</span>
-    <button class="refresh-btn" onclick="load(true)">↻ Atualizar agora</button>
+  <!-- ============ FOOTER ============ -->
+  <footer class="border-t-4 border-ink bg-ink text-white mt-8 sm:mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 text-center">
+      <p id="footerText" class="text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] text-white/60 mb-3"></p>
+      <button onclick="load(true)" class="text-xs sm:text-sm font-black uppercase tracking-wider underline decoration-yellow decoration-2 underline-offset-4 hover:text-yellow transition-colors">
+        ↻ Atualizar Agora
+      </button>
+    </div>
   </footer>
 
+  <!-- ============ SCRIPT ============ -->
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrcXMa7mxzOLhikg9E4MxvjQMtLNawa8HIgUlRc46KIHFCcl3w4eYUBTil6prxEtzM/exec';
 
@@ -232,7 +125,8 @@
 
     async function load(showSpinner) {
       if (showSpinner) {
-        document.getElementById('grid').innerHTML = '<div class="loading">Atualizando…</div>';
+        document.getElementById('grid').innerHTML =
+          '<div class="col-span-full text-center py-20 font-black uppercase tracking-[0.2em] text-ink/40">Atualizando...</div>';
       }
       try {
         const res = await fetch(API_URL, { cache: 'no-store' });
@@ -247,7 +141,7 @@
     function onLoad(result) {
       data = result;
       document.getElementById('subtitle').textContent =
-        'Estoque ' + result.month + ' · Atualizado ' + result.lastUpdate;
+        'ESTOQUE ' + result.month + ' · ATUALIZADO ' + result.lastUpdate;
       document.getElementById('footerText').textContent =
         'Atualização automática a cada 60s · Última: ' + result.lastUpdate;
       render();
@@ -255,13 +149,20 @@
 
     function onError(err) {
       document.getElementById('grid').innerHTML =
-        '<div class="empty">⚠️ Erro ao carregar: ' + (err.message || err) + '</div>';
+        '<div class="col-span-full text-center py-20 font-black uppercase tracking-[0.2em] text-red-700">⚠ ERRO: ' + (err.message || err) + '</div>';
     }
 
     function setBrand(brand) {
       currentBrand = brand;
-      document.getElementById('btn-apple').classList.toggle('active', brand === 'apple');
-      document.getElementById('btn-xiaomi').classList.toggle('active', brand === 'xiaomi');
+      const apple = document.getElementById('btn-apple');
+      const xiaomi = document.getElementById('btn-xiaomi');
+      if (brand === 'apple') {
+        apple.classList.add('bg-yellow'); apple.classList.remove('bg-white');
+        xiaomi.classList.add('bg-white'); xiaomi.classList.remove('bg-yellow');
+      } else {
+        xiaomi.classList.add('bg-yellow'); xiaomi.classList.remove('bg-white');
+        apple.classList.add('bg-white'); apple.classList.remove('bg-yellow');
+      }
       document.getElementById('search').value = '';
       render();
     }
@@ -278,8 +179,8 @@
 
       if (filtered.length === 0) {
         count.textContent = '';
-        grid.innerHTML = '<div class="empty">' +
-          (search ? 'Nenhum produto encontrado.' : 'Nenhum produto em estoque no momento.') +
+        grid.innerHTML = '<div class="col-span-full text-center py-20 font-black uppercase tracking-[0.2em] text-ink/40">' +
+          (search ? 'Nenhum produto encontrado' : 'Nenhum produto em estoque') +
           '</div>';
         return;
       }
@@ -288,36 +189,49 @@
         ? filtered.reduce((s, it) => s + (it.quantity || 1), 0)
         : filtered.length;
 
-      count.textContent = totalUnits + ' ' + (totalUnits === 1 ? 'unidade disponível' : 'unidades disponíveis');
-      grid.innerHTML = filtered.map(card).join('');
+      count.textContent = totalUnits + (totalUnits === 1 ? ' UNIDADE DISPONÍVEL' : ' UNIDADES DISPONÍVEIS');
+      grid.innerHTML = filtered.map((item, i) => card(item, i)).join('');
     }
 
-    function card(item) {
+    // Geometric corner decorations (rotated by index)
+    function corner(i) {
+      const variants = [
+        // Yellow circle
+        '<div class="absolute -top-2.5 -right-2.5 w-5 h-5 bg-yellow border-2 border-ink rounded-full"></div>',
+        // Blue square
+        '<div class="absolute -top-2.5 -right-2.5 w-5 h-5 bg-blue border-2 border-ink"></div>',
+        // Yellow triangle
+        '<svg class="absolute -top-2.5 -right-2.5 w-6 h-6" viewBox="0 0 20 20"><polygon points="10,1 19,18 1,18" fill="#F0C020" stroke="#121212" stroke-width="2" stroke-linejoin="round"/></svg>',
+      ];
+      return variants[i % variants.length];
+    }
+
+    function card(item, i) {
       const isApple = item.brand === 'apple';
       const meta = isApple
-        ? capitalize(item.cor) + (item.bateria !== null ? ' · Bateria ' + item.bateria + '%' : '')
+        ? capitalize(item.cor) + (item.bateria !== null ? ' · BAT ' + item.bateria + '%' : '')
         : capitalize(item.cor);
 
       const qtyBadge = !isApple && item.quantity > 1
-        ? '<div class="quantity-badge">✅ ' + item.quantity + ' unidades disponíveis</div>'
+        ? '<span class="inline-flex items-center self-start bg-blue text-white px-2.5 py-1 text-[10px] font-black uppercase tracking-wider border-2 border-ink mb-3">✓ ' + item.quantity + ' unid.</span>'
         : '';
-
-      const codeBlock = '<div class="card-ref">Ref: ' + escapeHtml(item.code) + '</div>';
 
       const wppMsg = buildWhatsAppMessage(item);
       const wppLink = 'https://wa.me/' + data.whatsapp + '?text=' + encodeURIComponent(wppMsg);
 
       return '' +
-        '<div class="card">' +
-          '<div class="card-modelo">' + escapeHtml(item.modelo) + '</div>' +
-          '<div class="card-meta">' + escapeHtml(meta) + '</div>' +
+        '<article class="lift relative bg-white border-2 sm:border-4 border-ink shadow-[6px_6px_0px_0px_#121212] sm:shadow-[8px_8px_0px_0px_#121212] p-5 sm:p-6 flex flex-col">' +
+          corner(i) +
+          '<h3 class="text-lg sm:text-xl font-black uppercase leading-tight tracking-tight mb-1.5">' + escapeHtml(item.modelo) + '</h3>' +
+          '<p class="text-xs sm:text-sm font-bold uppercase tracking-wider text-ink/70 mb-3">' + escapeHtml(meta) + '</p>' +
           qtyBadge +
-          codeBlock +
-          '<a class="whatsapp-btn" href="' + wppLink + '" target="_blank" rel="noopener">' +
-            '<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>' +
+          '<p class="text-[10px] font-mono text-ink/30 mt-auto mb-4 tracking-wider">REF: ' + escapeHtml(item.code) + '</p>' +
+          '<a href="' + wppLink + '" target="_blank" rel="noopener" ' +
+            'class="press bg-[#25D366] text-white border-2 sm:border-[3px] border-ink shadow-[4px_4px_0px_0px_#121212] py-2.5 sm:py-3 px-4 text-center font-black uppercase tracking-wider text-sm flex items-center justify-center gap-2">' +
+            '<svg viewBox="0 0 24 24" class="w-4 h-4 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>' +
             'Falar no WhatsApp' +
           '</a>' +
-        '</div>';
+        '</article>';
     }
 
     function buildWhatsAppMessage(item) {
