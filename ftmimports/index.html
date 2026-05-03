@@ -53,16 +53,9 @@
 
       <!-- Logo + Title row -->
       <div class="flex items-center gap-4 sm:gap-6 mb-4 sm:mb-6">
-        <!-- LOGO FTM (yellow front + blue 3D + black outlines) -->
-        <a href="/" class="flex-shrink-0 group">
-          <svg viewBox="0 0 130 80" class="h-14 sm:h-16 lg:h-20 w-auto" xmlns="http://www.w3.org/2000/svg" aria-label="FTM">
-            <!-- Blue depth layer (offset behind) -->
-            <text x="16" y="66" font-family="Outfit, sans-serif" font-weight="900" font-size="72" letter-spacing="-4"
-                  fill="#1040C0" stroke="#121212" stroke-width="2" stroke-linejoin="round">FTM</text>
-            <!-- Yellow front layer -->
-            <text x="10" y="60" font-family="Outfit, sans-serif" font-weight="900" font-size="72" letter-spacing="-4"
-                  fill="#F0C020" stroke="#121212" stroke-width="2" stroke-linejoin="round">FTM</text>
-          </svg>
+        <!-- LOGO FTM -->
+        <a href="/" class="flex-shrink-0">
+          <img src="/ftmimports/img/logo.png" alt="FTM Imports" class="h-16 sm:h-20 lg:h-24 w-auto" />
         </a>
 
         <div class="flex-1 min-w-0">
@@ -75,15 +68,15 @@
         </div>
       </div>
 
-      <!-- Toggle Apple / Xiaomi -->
+      <!-- Toggle Apple / Android -->
       <div class="grid grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4">
         <button id="btn-apple" onclick="setBrand('apple')"
-                class="press bg-yellow text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-2.5 sm:py-3 px-3 font-black uppercase tracking-wider text-sm sm:text-base">
-          🍎 Apple
+                class="press bg-yellow text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 sm:py-3.5 px-3 font-black uppercase tracking-[0.2em] text-sm sm:text-base">
+          Apple
         </button>
         <button id="btn-xiaomi" onclick="setBrand('xiaomi')"
-                class="press bg-white text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-2.5 sm:py-3 px-3 font-black uppercase tracking-wider text-sm sm:text-base">
-          📱 Xiaomi
+                class="press bg-white text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 sm:py-3.5 px-3 font-black uppercase tracking-[0.2em] text-sm sm:text-base">
+          Android
         </button>
       </div>
 
