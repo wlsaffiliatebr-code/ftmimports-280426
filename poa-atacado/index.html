@@ -183,6 +183,15 @@
     let currentBrand = 'apple';
 
     // ============ ATACADO PRICING ============
+    // Arredonda sempre PRA CIMA pro proximo XX40 ou XX90
+    function roundUp(value) {
+      const remainder = value % 100;
+      const base = value - remainder;
+      if (remainder <= 40) return base + 40;
+      if (remainder <= 90) return base + 90;
+      return base + 100 + 40;
+    }
+
     // Decodifica o code da API ("261018" + custo invertido) pra obter o custo
     function decodeCost(code) {
       if (!code || !code.startsWith('261018') || code.length <= 6) return null;
@@ -194,7 +203,7 @@
     // Seminovos atacado: iPhones 7%, Android 15%
     function precoSeminovoAtacado(custo, brand) {
       const margem = brand === 'apple' ? 0.07 : 0.15;
-      return Math.round(custo * (1 + margem));
+      return roundUp(custo * (1 + margem));
     }
 
     // Novos atacado: tabela por faixa de custo
@@ -209,7 +218,7 @@
     }
 
     function precoNovoAtacado(item) {
-      return item.custo + getMargemAtacadoNovo(item.custo);
+      return roundUp(item.custo + getMargemAtacadoNovo(item.custo));
     }
 
     function calcularEconomia(precoApple, precoFTM) {
@@ -487,7 +496,7 @@
       const preco = custo ? precoSeminovoAtacado(custo, item.brand) : null;
 
       const precoBlock = preco
-        ? '<div class="bg-blue text-white border-2 border-ink py-3 px-3 mb-4 text-center">' +
+        ? '<div class="bg-yellow border-2 border-ink py-3 px-3 mb-4 text-center">' +
             '<p class="text-2xl sm:text-3xl font-black tracking-tight leading-none">R$ ' + formatBR(preco) + '</p>' +
             '<p class="text-[10px] sm:text-xs font-black uppercase tracking-wider mt-1 leading-tight">no Pix · Atacado</p>' +
           '</div>'
@@ -533,7 +542,7 @@
       }
 
       const precoBlock = '' +
-        '<div class="bg-blue text-white border-2 border-ink py-3 px-3 mb-4 text-center">' +
+        '<div class="bg-yellow border-2 border-ink py-3 px-3 mb-4 text-center">' +
           '<p class="text-2xl sm:text-3xl font-black tracking-tight leading-none">R$ ' + formatBR(preco) + '</p>' +
           '<p class="text-[10px] sm:text-xs font-black uppercase tracking-wider mt-1 leading-tight">no Pix · Atacado</p>' +
         '</div>';
