@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FTM Imports · Estoque em Tempo Real</title>
-  <meta name="description" content="FTM Imports — Apple, iPhones seminovos e Android. Estoque atualizado em tempo real. Atendimento via WhatsApp.">
-  <meta property="og:title" content="FTM Imports · Estoque em Tempo Real">
-  <meta property="og:description" content="Apple, iPhones seminovos e Android · Atualizado em tempo real">
+  <title>FTM Imports · Apple, iPhones e Android · Importação direta com garantia</title>
+  <meta name="description" content="FTM Imports — Apple, iPhones seminovos e Android importados direto, com garantia oficial. Estoque ao vivo, guias técnicos e atendimento via WhatsApp.">
+  <meta property="og:title" content="FTM Imports · Apple, iPhones e Android">
+  <meta property="og:description" content="Importação direta · Garantia oficial · Estoque ao vivo · WhatsApp">
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,613 +40,381 @@
       background-image: radial-gradient(#12121215 1.5px, transparent 1.5px);
       background-size: 18px 18px;
     }
-    /* Modal animations */
-    .modal-overlay { animation: fadeIn .2s ease-out; }
-    .modal-content { animation: popIn .3s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    .stripes {
+      background-image: repeating-linear-gradient(45deg, #12121208 0 8px, transparent 8px 16px);
     }
-    @keyframes popIn {
-      from { opacity: 0; transform: translateY(-20px) scale(0.92); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
+    details > summary { list-style: none; cursor: pointer; }
+    details > summary::-webkit-details-marker { display: none; }
+    details[open] .faq-arrow { transform: rotate(45deg); }
+    .faq-arrow { transition: transform .2s ease-out; display: inline-block; }
+    .pulse-dot { animation: pulse 1.6s ease-in-out infinite; }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
     }
-    /* Dropdown rotação suave do arrow */
-    .arrow-open { transform: rotate(180deg); }
-    .menu-arrow { transition: transform .2s ease-out; display: inline-block; }
   </style>
 </head>
 <body class="min-h-screen bg-bg text-ink">
 
   <!-- ============ HEADER ============ -->
   <header class="bg-white border-b-4 border-ink sticky top-0 z-40 dot-grid">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-
-      <!-- Brand title (sem logo) -->
-      <div class="text-center sm:text-left mb-4 sm:mb-6">
-        <h1 class="text-4xl sm:text-5xl lg:text-7xl font-black uppercase leading-[0.9] tracking-tighter">
-          FTM Imports
-        </h1>
-        <p class="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] mt-1 sm:mt-2 text-ink/70 text-center leading-relaxed" id="subtitle">
-          Estoque em tempo real
-        </p>
-      </div>
-
-      <!-- Tabs visíveis nos primeiros 15s (ou até primeiro clique) -->
-      <div id="tabs-expanded" class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 mb-3 sm:mb-4">
-        <button data-brand="apple"  onclick="setBrand('apple')"
-                class="brand-tab press bg-blue text-white border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 px-2 sm:px-3 font-black uppercase tracking-[0.1em] text-xs sm:text-sm">
-          Apple <span class="text-[10px] sm:text-[11px] opacity-70">(Seminovos)</span>
-        </button>
-        <button data-brand="novos"  onclick="setBrand('novos')"
-                class="brand-tab press bg-white text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 px-2 sm:px-3 font-black uppercase tracking-[0.1em] text-xs sm:text-sm">
-          Apple <span class="text-[10px] sm:text-[11px] opacity-70">(Novos)</span>
-        </button>
-        <button data-brand="xiaomi" onclick="setBrand('xiaomi')"
-                class="brand-tab press bg-white text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 px-2 sm:px-3 font-black uppercase tracking-[0.1em] text-xs sm:text-sm">
-          Android <span class="text-[10px] sm:text-[11px] opacity-70">(Novos)</span>
-        </button>
-      </div>
-
-      <!-- Menu colapsado (aparece após 15s ou após primeiro clique) -->
-      <div id="tabs-collapsed" class="relative mb-3 sm:mb-4 hidden">
-        <button id="menu-trigger" onclick="toggleMenu(event)"
-                class="press w-full bg-blue text-white border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 px-4 flex items-center justify-between gap-3">
-          <div class="flex-1 text-left">
-            <p class="text-[9px] sm:text-[10px] font-bold opacity-70 uppercase tracking-[0.2em] leading-tight mb-0.5">Você está em</p>
-            <p id="current-label" class="text-sm sm:text-base font-black uppercase tracking-tight leading-none">Apple (Seminovos)</p>
-          </div>
-          <span id="menu-arrow" class="menu-arrow text-lg sm:text-xl font-black flex-shrink-0">▼</span>
-        </button>
-        <div id="menu-dropdown" class="hidden mt-2 bg-white border-2 sm:border-4 border-ink shadow-[4px_4px_0px_0px_#121212] sm:shadow-[6px_6px_0px_0px_#121212]">
-          <button data-brand="apple"  onclick="setBrand('apple')"  class="menu-item press block w-full text-left px-5 py-4 font-black uppercase tracking-[0.15em] text-sm hover:bg-yellow border-b-2 border-ink/10">
-            Apple <span class="opacity-60">(Seminovos)</span>
-          </button>
-          <button data-brand="novos"  onclick="setBrand('novos')"  class="menu-item press block w-full text-left px-5 py-4 font-black uppercase tracking-[0.15em] text-sm hover:bg-yellow border-b-2 border-ink/10">
-            Apple <span class="opacity-60">(Novos)</span>
-          </button>
-          <button data-brand="xiaomi" onclick="setBrand('xiaomi')" class="menu-item press block w-full text-left px-5 py-4 font-black uppercase tracking-[0.15em] text-sm hover:bg-yellow">
-            Android <span class="opacity-60">(Novos)</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Search -->
-      <div class="relative">
-        <input type="search" id="search" oninput="render()"
-               placeholder="BUSCAR MODELO, COR..."
-               class="w-full px-4 py-2.5 sm:py-3 bg-white border-2 sm:border-4 border-ink font-bold uppercase tracking-wide text-sm sm:text-base placeholder:text-ink/40 focus:outline-none focus:shadow-[4px_4px_0px_0px_#121212] transition-shadow">
-      </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex items-center justify-between gap-4">
+      <a href="./" class="block">
+        <p class="text-xl sm:text-2xl lg:text-3xl font-black uppercase leading-none tracking-tighter">FTM Imports</p>
+        <p class="text-[8px] sm:text-[10px] font-bold uppercase tracking-[0.3em] mt-1 text-ink/70">Apple · Android · Importação direta</p>
+      </a>
+      <nav class="hidden md:flex items-center gap-2">
+        <a href="./estoque/" class="press bg-white text-ink border-2 border-ink shadow-[3px_3px_0px_0px_#121212] py-2 px-3 font-black uppercase tracking-[0.15em] text-[11px]">Estoque</a>
+        <a href="#guias" class="press bg-white text-ink border-2 border-ink shadow-[3px_3px_0px_0px_#121212] py-2 px-3 font-black uppercase tracking-[0.15em] text-[11px]">Guias</a>
+        <a href="#trade-in" class="press bg-white text-ink border-2 border-ink shadow-[3px_3px_0px_0px_#121212] py-2 px-3 font-black uppercase tracking-[0.15em] text-[11px]">Trade-in</a>
+        <a href="#" class="wpp-cta press bg-wpp text-white border-2 border-ink shadow-[3px_3px_0px_0px_#121212] py-2 px-3 font-black uppercase tracking-[0.15em] text-[11px] flex items-center gap-2"
+           data-msg="Olá! Cheguei pelo site da FTM Imports e gostaria de mais informações.">
+          <svg viewBox="0 0 24 24" class="w-3.5 h-3.5 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          WhatsApp
+        </a>
+      </nav>
+      <a href="#" class="wpp-cta md:hidden press bg-wpp text-white border-2 border-ink shadow-[3px_3px_0px_0px_#121212] py-2 px-3 font-black uppercase tracking-[0.15em] text-[10px] flex items-center gap-1.5"
+         data-msg="Olá! Cheguei pelo site da FTM Imports e gostaria de mais informações.">
+        <svg viewBox="0 0 24 24" class="w-3.5 h-3.5 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        Falar
+      </a>
     </div>
   </header>
 
-  <!-- ============ MAIN ============ -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
-    <div id="count" class="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] mb-4 sm:mb-6"></div>
-    <div id="content">
-      <div class="text-center py-20 font-black uppercase tracking-[0.2em] text-ink/40">Carregando estoque...</div>
+  <!-- ============ HERO ============ -->
+  <section class="border-b-4 border-ink bg-yellow stripes">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24">
+      <p class="inline-block bg-ink text-yellow px-3 py-1.5 text-[10px] sm:text-xs font-black uppercase tracking-[0.25em] mb-5">⚡ Importação direta dos EUA</p>
+      <h1 class="text-5xl sm:text-7xl lg:text-8xl font-black uppercase leading-[0.85] tracking-tighter mb-5 max-w-5xl">
+        Apple, iPhones<br>e Android <span class="text-blue">por menos.</span>
+      </h1>
+      <p class="text-base sm:text-lg lg:text-xl font-bold tracking-wide mb-8 max-w-3xl">
+        Lançamentos, seminovos e Android <strong>com preço de importação</strong>, garantia oficial Apple e atendimento direto pelo WhatsApp. Sem loja, sem mensalidade, sem enrolação.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+        <a href="./estoque/" class="press inline-flex items-center justify-center gap-2 bg-blue text-white border-4 border-ink shadow-[6px_6px_0px_0px_#121212] py-4 px-6 sm:py-5 sm:px-8 font-black uppercase tracking-wider text-sm sm:text-base">
+          Ver estoque ao vivo →
+        </a>
+        <a href="#" class="wpp-cta press inline-flex items-center justify-center gap-2 bg-wpp text-white border-4 border-ink shadow-[6px_6px_0px_0px_#121212] py-4 px-6 sm:py-5 sm:px-8 font-black uppercase tracking-wider text-sm sm:text-base"
+           data-msg="Olá! Cheguei pelo site da FTM Imports e gostaria de mais informações sobre os produtos disponíveis.">
+          <svg viewBox="0 0 24 24" class="w-5 h-5 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          Falar no WhatsApp
+        </a>
+      </div>
     </div>
-  </main>
+  </section>
+
+  <!-- ============ ESTOQUE AO VIVO (DESTAQUE) ============ -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+    <a href="./estoque/" class="lift block bg-white border-4 border-ink shadow-[8px_8px_0px_0px_#121212] p-6 sm:p-8 lg:p-10 group">
+      <div class="grid lg:grid-cols-3 gap-6 lg:gap-8 items-center">
+        <div class="lg:col-span-2">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-money pulse-dot"></span>
+            <p class="text-[10px] sm:text-xs font-black uppercase tracking-[0.25em] text-money">Atualiza a cada 60 segundos</p>
+          </div>
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tighter leading-[0.9] mb-4">
+            Estoque ao vivo
+          </h2>
+          <p class="text-base sm:text-lg font-bold text-ink/80 mb-5">
+            iPhones seminovos com bateria conferida, Apple novos lacrados (iPhone 17, MacBook M5, iPad, Watch, AirPods) e Android. Cada item com referência única e foto.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="bg-blue text-white border-2 border-ink px-3 py-1 text-[10px] sm:text-xs font-black uppercase tracking-wider">Apple Seminovos</span>
+            <span class="bg-yellow text-ink border-2 border-ink px-3 py-1 text-[10px] sm:text-xs font-black uppercase tracking-wider">Apple Novos</span>
+            <span class="bg-ink text-white border-2 border-ink px-3 py-1 text-[10px] sm:text-xs font-black uppercase tracking-wider">Android</span>
+          </div>
+        </div>
+        <div class="text-center lg:text-right">
+          <div class="inline-block bg-ink text-yellow border-4 border-ink shadow-[6px_6px_0px_0px_#121212] py-5 px-8 group-hover:translate-x-1 transition-transform">
+            <p class="text-sm sm:text-base font-black uppercase tracking-wider mb-1">Ver agora</p>
+            <p class="text-3xl sm:text-4xl font-black tracking-tighter leading-none">→</p>
+          </div>
+        </div>
+      </div>
+    </a>
+  </section>
+
+  <!-- ============ CATÁLOGO ============ -->
+  <!-- ESCALABILIDADE: pra adicionar/trocar categorias do estoque, edite os 3 cards abaixo -->
+  <section id="catalogo" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tighter mb-6 sm:mb-8 inline-block px-4 py-2 bg-ink text-yellow">Catálogo</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+
+      <a href="./estoque/" class="lift relative bg-white border-4 border-ink shadow-[6px_6px_0px_0px_#121212] p-6 block">
+        <div class="absolute -top-2.5 -right-2.5 w-5 h-5 bg-yellow border-2 border-ink rounded-full"></div>
+        <p class="text-[10px] font-black uppercase tracking-[0.25em] text-ink/50 mb-2">01</p>
+        <h3 class="text-xl sm:text-2xl font-black uppercase tracking-tight leading-tight mb-3">Apple Seminovos</h3>
+        <p class="text-sm font-bold text-ink/80 leading-relaxed mb-4">iPhones revisados, com referência única, cor e bateria conferidas. Atualizado em tempo real.</p>
+        <p class="text-xs font-black uppercase tracking-wider text-blue">Ver disponíveis →</p>
+      </a>
+
+      <a href="./estoque/" class="lift relative bg-white border-4 border-ink shadow-[6px_6px_0px_0px_#121212] p-6 block">
+        <div class="absolute -top-2.5 -right-2.5 w-5 h-5 bg-blue border-2 border-ink"></div>
+        <p class="text-[10px] font-black uppercase tracking-[0.25em] text-ink/50 mb-2">02</p>
+        <h3 class="text-xl sm:text-2xl font-black uppercase tracking-tight leading-tight mb-3">Apple Novos</h3>
+        <p class="text-sm font-bold text-ink/80 leading-relaxed mb-4">iPhone 17, MacBook M5, iPad, Apple Watch, AirPods e AirTag — lacrados, com preço de importação.</p>
+        <p class="text-xs font-black uppercase tracking-wider text-blue">Ver lançamentos →</p>
+      </a>
+
+      <a href="./estoque/" class="lift relative bg-white border-4 border-ink shadow-[6px_6px_0px_0px_#121212] p-6 block">
+        <svg class="absolute -top-2.5 -right-2.5 w-6 h-6" viewBox="0 0 20 20"><polygon points="10,1 19,18 1,18" fill="#F0C020" stroke="#121212" stroke-width="2" stroke-linejoin="round"/></svg>
+        <p class="text-[10px] font-black uppercase tracking-[0.25em] text-ink/50 mb-2">03</p>
+        <h3 class="text-xl sm:text-2xl font-black uppercase tracking-tight leading-tight mb-3">Android Novos</h3>
+        <p class="text-sm font-bold text-ink/80 leading-relaxed mb-4">Xiaomi, Samsung e demais Android novos com preço de importação e estoque atualizado.</p>
+        <p class="text-xs font-black uppercase tracking-wider text-blue">Ver disponíveis →</p>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ============ GUIAS TÉCNICOS ============ -->
+  <!-- ESCALABILIDADE: cada guia técnico vira uma pasta /produto/ com index.html.
+       Pra adicionar novo guia: copie um card abaixo, ajuste título/descrição/link.
+       Cards "Em breve" usam <span> em vez de <a> e classe opacity-60. -->
+  <section id="guias" class="border-y-4 border-ink bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tighter mb-3 inline-block px-4 py-2 bg-blue text-white">Guias técnicos</h2>
+      <p class="text-base sm:text-lg font-bold tracking-wide mb-8 max-w-3xl text-ink/80">
+        Páginas detalhadas, sem marketing barato — comparativos honestos, especificações, FAQ e quando vale (ou não) trocar de aparelho.
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+
+        <!-- GUIA ATIVO -->
+        <a href="./macbook-air-m5/" class="lift relative bg-bg border-4 border-ink shadow-[6px_6px_0px_0px_#121212] p-6 block">
+          <div class="absolute -top-3 -right-3 bg-money text-white border-2 border-ink shadow-[3px_3px_0px_0px_#121212] px-3 py-1.5 font-black uppercase text-[10px] tracking-[0.2em]">Disponível</div>
+          <p class="text-[10px] font-black uppercase tracking-[0.25em] text-ink/50 mb-2">MacBook</p>
+          <h3 class="text-xl sm:text-2xl font-black uppercase tracking-tight leading-tight mb-3">MacBook Air M5<br>16GB / 512GB</h3>
+          <p class="text-sm font-bold text-ink/80 leading-relaxed mb-4">Comparativo M1 e Intel, Apple Intelligence, por que 16GB virou mínimo. Tudo que importa antes de comprar.</p>
+          <p class="text-xs font-black uppercase tracking-wider text-blue">Ler guia completo →</p>
+        </a>
+
+        <!-- EM BREVE -->
+        <div class="relative bg-bg border-4 border-ink shadow-[6px_6px_0px_0px_#121212] p-6 opacity-70">
+          <div class="absolute -top-3 -right-3 bg-ink text-yellow border-2 border-ink shadow-[3px_3px_0px_0px_#121212] px-3 py-1.5 font-black uppercase text-[10px] tracking-[0.2em]">Em breve</div>
+          <p class="text-[10px] font-black uppercase tracking-[0.25em] text-ink/50 mb-2">iPhone</p>
+          <h3 class="text-xl sm:text-2xl font-black uppercase tracking-tight leading-tight mb-3">iPhone 17 / Pro<br>/ Pro Max</h3>
+          <p class="text-sm font-bold text-ink/80 leading-relaxed mb-4">Comparativo entre os modelos, qual escolher pra cada perfil de uso e o que mudou desde o iPhone 16.</p>
+          <p class="text-xs font-black uppercase tracking-wider text-ink/40">Em produção</p>
+        </div>
+
+        <!-- EM BREVE -->
+        <div class="relative bg-bg border-4 border-ink shadow-[6px_6px_0px_0px_#121212] p-6 opacity-70">
+          <div class="absolute -top-3 -right-3 bg-ink text-yellow border-2 border-ink shadow-[3px_3px_0px_0px_#121212] px-3 py-1.5 font-black uppercase text-[10px] tracking-[0.2em]">Em breve</div>
+          <p class="text-[10px] font-black uppercase tracking-[0.25em] text-ink/50 mb-2">AirPods</p>
+          <h3 class="text-xl sm:text-2xl font-black uppercase tracking-tight leading-tight mb-3">AirPods Pro 3</h3>
+          <p class="text-sm font-bold text-ink/80 leading-relaxed mb-4">Diferenças vs AirPods Pro 2, qualidade do cancelamento ativo e quem realmente precisa do upgrade.</p>
+          <p class="text-xs font-black uppercase tracking-wider text-ink/40">Em produção</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ COMO FUNCIONA ============ -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tighter mb-8 inline-block px-4 py-2 bg-ink text-yellow">Como funciona</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+
+      <div class="bg-white border-4 border-ink shadow-[6px_6px_0px_0px_#121212] p-5">
+        <p class="text-4xl sm:text-5xl font-black tracking-tighter leading-none mb-3 text-blue">01</p>
+        <p class="text-base font-black uppercase tracking-wider mb-2">Importação direta</p>
+        <p class="text-sm font-bold text-ink/80 leading-relaxed">Compramos diretamente nos EUA. Sem intermediários, sem markup de loja física.</p>
+      </div>
+
+      <div class="bg-white border-4 border-ink shadow-[6px_6px_0px_0px_#121212] p-5">
+        <p class="text-4xl sm:text-5xl font-black tracking-tighter leading-none mb-3 text-blue">02</p>
+        <p class="text-base font-black uppercase tracking-wider mb-2">Garantia oficial</p>
+        <p class="text-sm font-bold text-ink/80 leading-relaxed">Apple cobre o produto pelo número de série em qualquer Apple Store no mundo, inclusive Brasil.</p>
+      </div>
+
+      <div class="bg-white border-4 border-ink shadow-[6px_6px_0px_0px_#121212] p-5">
+        <p class="text-4xl sm:text-5xl font-black tracking-tighter leading-none mb-3 text-blue">03</p>
+        <p class="text-base font-black uppercase tracking-wider mb-2">Atendimento humano</p>
+        <p class="text-sm font-bold text-ink/80 leading-relaxed">Sem bot, sem formulário. Você fala direto com a gente pelo WhatsApp pra fechar pedido ou tirar dúvida.</p>
+      </div>
+
+      <div class="bg-white border-4 border-ink shadow-[6px_6px_0px_0px_#121212] p-5">
+        <p class="text-4xl sm:text-5xl font-black tracking-tighter leading-none mb-3 text-blue">04</p>
+        <p class="text-base font-black uppercase tracking-wider mb-2">Pix ou 12x sem juros</p>
+        <p class="text-sm font-bold text-ink/80 leading-relaxed">Desconto de 13% no Pix ou 12x sem juros no cartão. Aceitamos seu usado como entrada.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ TRADE-IN ============ -->
+  <section id="trade-in" class="border-y-4 border-ink bg-yellow stripes">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+      <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div>
+          <p class="inline-block bg-ink text-yellow px-3 py-1.5 text-[10px] sm:text-xs font-black uppercase tracking-[0.25em] mb-4">⚡ Pague menos</p>
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tighter leading-[0.9] mb-5">
+            Troque seu MacBook<br>ou iPhone <span class="text-blue">usado.</span>
+          </h2>
+          <p class="text-base sm:text-lg font-bold tracking-wide mb-3">
+            Aceitamos seu aparelho como parte do pagamento. Avaliação rápida pelo WhatsApp — você manda modelo, ano, configuração e fotos, devolvemos um valor.
+          </p>
+          <p class="text-sm font-bold text-ink/80 mb-6">
+            Funciona pra MacBook (Intel ou Apple Silicon), iPhone, iPad e Apple Watch.
+          </p>
+          <a href="#" class="wpp-cta press inline-flex items-center justify-center gap-2 bg-wpp text-white border-4 border-ink shadow-[6px_6px_0px_0px_#121212] py-4 px-6 font-black uppercase tracking-wider text-sm sm:text-base"
+             data-msg="Olá! Gostaria de avaliar meu aparelho usado para usar como parte do pagamento de um produto novo. É um [iPhone/MacBook/iPad/Apple Watch — modelo e ano]. Pode me ajudar?">
+            <svg viewBox="0 0 24 24" class="w-5 h-5 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            Avaliar meu aparelho
+          </a>
+        </div>
+
+        <div class="bg-white border-4 border-ink shadow-[8px_8px_0px_0px_#121212] p-6 sm:p-8">
+          <p class="text-[10px] sm:text-xs font-black uppercase tracking-[0.25em] text-ink/60 mb-4">Como avaliamos</p>
+          <ul class="space-y-3.5 text-sm sm:text-base font-bold leading-snug">
+            <li class="flex gap-3">
+              <span class="flex-shrink-0 w-6 h-6 bg-blue text-white border-2 border-ink flex items-center justify-center text-xs font-black">1</span>
+              <span>Você manda modelo, ano, configuração e fotos no WhatsApp</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="flex-shrink-0 w-6 h-6 bg-blue text-white border-2 border-ink flex items-center justify-center text-xs font-black">2</span>
+              <span>Devolvemos avaliação preliminar em poucas horas</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="flex-shrink-0 w-6 h-6 bg-blue text-white border-2 border-ink flex items-center justify-center text-xs font-black">3</span>
+              <span>Conferimos o aparelho pessoalmente e fechamos o valor final</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="flex-shrink-0 w-6 h-6 bg-blue text-white border-2 border-ink flex items-center justify-center text-xs font-black">4</span>
+              <span>Você paga só a diferença (Pix ou cartão) e leva o novo</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section id="faq" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tighter mb-8 inline-block px-4 py-2 bg-ink text-yellow">Perguntas frequentes</h2>
+
+    <div class="space-y-4 max-w-4xl">
+
+      <details class="bg-white border-4 border-ink shadow-[6px_6px_0px_0px_#121212] group">
+        <summary class="px-5 py-4 flex items-center justify-between gap-4 font-black uppercase tracking-wider text-sm sm:text-base">
+          <span>Os produtos novos são originais e lacrados?</span>
+          <span class="faq-arrow text-2xl font-black flex-shrink-0">+</span>
+        </summary>
+        <div class="px-5 pb-5 text-sm sm:text-base font-bold leading-relaxed text-ink/85 border-t-2 border-ink/10 pt-4">
+          <strong>Sim.</strong> Todos os produtos novos chegam com embalagem original Apple, lacrados de fábrica, com nota fiscal de importação e número de série rastreável no site da Apple. É o mesmo produto que você compraria numa Apple Store nos EUA.
+        </div>
+      </details>
+
+      <details class="bg-white border-4 border-ink shadow-[6px_6px_0px_0px_#121212] group">
+        <summary class="px-5 py-4 flex items-center justify-between gap-4 font-black uppercase tracking-wider text-sm sm:text-base">
+          <span>Tem garantia válida no Brasil?</span>
+          <span class="faq-arrow text-2xl font-black flex-shrink-0">+</span>
+        </summary>
+        <div class="px-5 pb-5 text-sm sm:text-base font-bold leading-relaxed text-ink/85 border-t-2 border-ink/10 pt-4">
+          A garantia da Apple é <strong>internacional</strong> — funciona em qualquer Apple Store ou centro autorizado no mundo, inclusive Brasil. Você agenda atendimento com o número de série como qualquer cliente. 1 ano de garantia padrão Apple incluso.
+        </div>
+      </details>
+
+      <details class="bg-white border-4 border-ink shadow-[6px_6px_0px_0px_#121212] group">
+        <summary class="px-5 py-4 flex items-center justify-between gap-4 font-black uppercase tracking-wider text-sm sm:text-base">
+          <span>Quais são as formas de pagamento?</span>
+          <span class="faq-arrow text-2xl font-black flex-shrink-0">+</span>
+        </summary>
+        <div class="px-5 pb-5 text-sm sm:text-base font-bold leading-relaxed text-ink/85 border-t-2 border-ink/10 pt-4">
+          <strong>Pix</strong> com 13% de desconto à vista, ou <strong>cartão de crédito em 12x sem juros</strong>. Também aceitamos seu MacBook, iPhone, iPad ou Apple Watch usado como entrada (trade-in) — fazemos a avaliação pelo WhatsApp.
+        </div>
+      </details>
+
+      <details class="bg-white border-4 border-ink shadow-[6px_6px_0px_0px_#121212] group">
+        <summary class="px-5 py-4 flex items-center justify-between gap-4 font-black uppercase tracking-wider text-sm sm:text-base">
+          <span>Quanto tempo demora pra chegar?</span>
+          <span class="faq-arrow text-2xl font-black flex-shrink-0">+</span>
+        </summary>
+        <div class="px-5 pb-5 text-sm sm:text-base font-bold leading-relaxed text-ink/85 border-t-2 border-ink/10 pt-4">
+          Depende do que está em estoque local versus o que precisa ser importado. Itens em estoque saem em até 24h. Os prazos atualizados de cada produto a gente confirma direto no WhatsApp antes de fechar o pedido.
+        </div>
+      </details>
+
+      <details class="bg-white border-4 border-ink shadow-[6px_6px_0px_0px_#121212] group">
+        <summary class="px-5 py-4 flex items-center justify-between gap-4 font-black uppercase tracking-wider text-sm sm:text-base">
+          <span>Vocês têm loja física?</span>
+          <span class="faq-arrow text-2xl font-black flex-shrink-0">+</span>
+        </summary>
+        <div class="px-5 pb-5 text-sm sm:text-base font-bold leading-relaxed text-ink/85 border-t-2 border-ink/10 pt-4">
+          Operamos via WhatsApp para manter o preço de importação — sem aluguel de loja, sem markup. Para clientes em Porto Alegre/RS, fazemos retirada combinada. Para o resto do Brasil, enviamos com seguro.
+        </div>
+      </details>
+
+      <details class="bg-white border-4 border-ink shadow-[6px_6px_0px_0px_#121212] group">
+        <summary class="px-5 py-4 flex items-center justify-between gap-4 font-black uppercase tracking-wider text-sm sm:text-base">
+          <span>O que diferencia comprar com vocês versus na Apple?</span>
+          <span class="faq-arrow text-2xl font-black flex-shrink-0">+</span>
+        </summary>
+        <div class="px-5 pb-5 text-sm sm:text-base font-bold leading-relaxed text-ink/85 border-t-2 border-ink/10 pt-4">
+          <strong>Preço de importação.</strong> Um MacBook Air M5 16/512 que custa R$ 13.999 na Apple Brasil sai por R$ 7.780 no Pix com a gente — o mesmo produto, lacrado, com a mesma garantia mundial Apple. A diferença é o imposto de importação que a Apple Brasil repassa no preço final.
+        </div>
+      </details>
+
+    </div>
+  </section>
+
+  <!-- ============ CTA FINAL ============ -->
+  <section class="bg-ink text-white border-y-4 border-ink">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 text-center">
+      <p class="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-yellow mb-3">⚡ Atendimento direto</p>
+      <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tighter leading-[0.9] mb-6">
+        Pronto pra<br><span class="text-yellow">começar?</span>
+      </h2>
+      <p class="text-base sm:text-lg font-bold tracking-wide mb-8 max-w-2xl mx-auto text-white/85">
+        Sem formulário, sem cadastro. Você manda mensagem, a gente responde — o mesmo dia. Tira dúvida, fecha pedido, combina entrega.
+      </p>
+      <a href="#" class="wpp-cta press inline-flex items-center justify-center gap-3 bg-wpp text-white border-4 border-yellow shadow-[8px_8px_0px_0px_#F0C020] py-4 px-8 sm:py-5 sm:px-10 font-black uppercase tracking-wider text-base sm:text-lg"
+         data-msg="Olá! Cheguei pelo site da FTM Imports e gostaria de mais informações.">
+        <svg viewBox="0 0 24 24" class="w-6 h-6 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        Falar no WhatsApp
+      </a>
+      <p class="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-white/50 mt-6">Resposta em minutos · Seg–Sáb</p>
+    </div>
+  </section>
 
   <!-- ============ FOOTER ============ -->
-  <footer class="border-t-4 border-ink bg-ink text-white mt-8 sm:mt-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 text-center">
-      <p id="footerText" class="text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] text-white/60 mb-3"></p>
-      <button onclick="load(true)" class="text-xs sm:text-sm font-black uppercase tracking-wider underline decoration-yellow decoration-2 underline-offset-4 hover:text-yellow transition-colors">
-        ↻ Atualizar Agora
-      </button>
+  <footer class="bg-ink text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10 text-center">
+      <p class="text-2xl sm:text-3xl font-black uppercase tracking-tighter mb-2">FTM Imports</p>
+      <p class="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] text-white/60 mb-5">Apple · Android · Importação direta · Garantia oficial</p>
+      <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs sm:text-sm font-black uppercase tracking-wider mb-5">
+        <a href="./estoque/" class="underline decoration-yellow decoration-2 underline-offset-4 hover:text-yellow transition-colors">Estoque ao vivo</a>
+        <a href="#guias" class="underline decoration-yellow decoration-2 underline-offset-4 hover:text-yellow transition-colors">Guias técnicos</a>
+        <a href="#trade-in" class="underline decoration-yellow decoration-2 underline-offset-4 hover:text-yellow transition-colors">Trade-in</a>
+        <a href="#faq" class="underline decoration-yellow decoration-2 underline-offset-4 hover:text-yellow transition-colors">FAQ</a>
+        <a href="#" class="wpp-cta underline decoration-yellow decoration-2 underline-offset-4 hover:text-yellow transition-colors"
+           data-msg="Olá! Cheguei pelo site da FTM Imports e gostaria de mais informações.">WhatsApp</a>
+      </div>
+      <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">© 2026 FTM Imports · Todos os direitos reservados</p>
     </div>
   </footer>
 
-  <!-- ============ TRADE-IN MODAL (popup primeira visita) ============ -->
-  <div id="trade-in-modal" class="hidden fixed inset-0 z-[100] bg-black/70 modal-overlay flex items-center justify-center p-4" onclick="if(event.target===this)closeTradeIn()">
-    <div class="modal-content bg-yellow border-4 border-ink shadow-[12px_12px_0px_0px_#121212] max-w-md w-full p-6 sm:p-8 relative">
-      <button onclick="closeTradeIn()"
-              class="absolute -top-4 -right-4 w-10 h-10 bg-ink text-white border-2 border-ink rounded-full flex items-center justify-center font-black text-lg hover:bg-ink/90">
-        ✕
-      </button>
-
-      <p class="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] mb-2 opacity-70">⚡ Oferta especial</p>
-      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tighter mb-3 leading-[0.9]">
-        Trocamos seu aparelho usado
-      </h2>
-      <p class="text-sm sm:text-base font-bold tracking-wide mb-6 opacity-90">
-        Aceitamos seu <strong>iPhone</strong> ou <strong>MacBook</strong> como parte do pagamento na compra de qualquer produto novo. Avaliação rápida pelo WhatsApp.
-      </p>
-      <a href="#" id="trade-in-cta" target="_blank" rel="noopener" onclick="closeTradeIn()"
-         class="press flex items-center justify-center gap-2 bg-wpp text-white border-2 border-ink shadow-[4px_4px_0px_0px_#121212] py-3.5 px-6 font-black uppercase tracking-wider text-sm sm:text-base">
-        <svg viewBox="0 0 24 24" class="w-5 h-5 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-        Avaliar no WhatsApp
-      </a>
-    </div>
-  </div>
-
   <!-- ============ SCRIPT ============ -->
+  <!--
+    PADRÃO DE CTAs DE WHATSAPP:
+    - Use class="wpp-cta" em qualquer <a> que deva abrir WhatsApp
+    - Defina data-msg="..." com a mensagem contextualizada
+    - O script abaixo monta o link wa.me automaticamente em todos
+    - Pra mudar o número, edite a constante WHATSAPP em UM lugar só
+  -->
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbzrcXMa7mxzOLhikg9E4MxvjQMtLNawa8HIgUlRc46KIHFCcl3w4eYUBTil6prxEtzM/exec';
     const WHATSAPP = '5551992677191';
-
-    // Labels do menu
-    const BRAND_LABELS = {
-      'apple':  'Apple <span class="opacity-60">(Seminovos)</span>',
-      'novos':  'Apple <span class="opacity-60">(Novos)</span>',
-      'xiaomi': 'Android <span class="opacity-60">(Novos)</span>',
-    };
-
-    // ============ DADOS DOS PRODUTOS NOVOS ============
-    const NOVOS_DATA = [
-      // iPhones (margem 10%)
-      { modelo: 'iPhone 13 128GB',          categoria: 'iPhone',      custo: 3290, precoApple: null },
-      { modelo: 'iPhone 14 128GB',          categoria: 'iPhone',      custo: 2950, precoApple: null },
-      { modelo: 'iPhone 15 128GB',          categoria: 'iPhone',      custo: 3650, precoApple: null },
-      { modelo: 'iPhone 16 128GB',          categoria: 'iPhone',      custo: 3950, precoApple: 8499 },
-      { modelo: 'iPhone 17 256GB',          categoria: 'iPhone',      custo: 4700, precoApple: 7999 },
-      { modelo: 'iPhone 17 Pro 256GB',      categoria: 'iPhone',      custo: 7250, precoApple: 11499 },
-      { modelo: 'iPhone 17 Pro 512GB',      categoria: 'iPhone',      custo: 7850, precoApple: 12999 },
-      { modelo: 'iPhone 17 Pro 1TB',        categoria: 'iPhone',      custo: 9000, precoApple: 14499 },
-      { modelo: 'iPhone 17 Pro Max 256GB',  categoria: 'iPhone',      custo: 7800, precoApple: 12499 },
-      { modelo: 'iPhone 17 Pro Max 512GB',  categoria: 'iPhone',      custo: 8750, precoApple: 13999 },
-      { modelo: 'iPhone 17 Pro Max 1TB',    categoria: 'iPhone',      custo: 9600, precoApple: 15499 },
-
-      // iPad (margem 20%)
-      { modelo: 'iPad 11 128GB',                  categoria: 'iPad', custo: 2000, precoApple: 4499 },
-      { modelo: 'iPad 11 256GB',                  categoria: 'iPad', custo: 2700, precoApple: 5499 },
-      { modelo: 'iPad Air M3 11" 128GB Wi-Fi',    categoria: 'iPad', custo: 3400, precoApple: 7499 },
-      { modelo: 'iPad Air M3 13" 128GB Wi-Fi',    categoria: 'iPad', custo: 4500, precoApple: 9499 },
-      { modelo: 'iPad Air M4 11" 128GB Wi-Fi',    categoria: 'iPad', custo: 3500, precoApple: 7499 },
-      { modelo: 'iPad Air M4 13" 128GB Wi-Fi',    categoria: 'iPad', custo: 4700, precoApple: 9499 },
-      { modelo: 'iPad Pro M4 11" 256GB Wi-Fi',    categoria: 'iPad', custo: 5500, precoApple: 13499 },
-      { modelo: 'iPad Pro M4 13" 256GB Wi-Fi',    categoria: 'iPad', custo: 7900, precoApple: 16999 },
-      { modelo: 'iPad Pro M5 11" 256GB Wi-Fi',    categoria: 'iPad', custo: 5500, precoApple: 13999 },
-      { modelo: 'iPad Pro M5 13" 256GB Wi-Fi',    categoria: 'iPad', custo: 8000, precoApple: 17499 },
-
-      // MacBook (margem 20%)
-      { modelo: 'MacBook Neo 13" 8/256',           categoria: 'MacBook', custo: 3950,  precoApple: 7299 },
-      { modelo: 'MacBook Neo 13" 8/512',           categoria: 'MacBook', custo: 4500,  precoApple: 8499 },
-      { modelo: 'MacBook Air M5 13" 16/512',       categoria: 'MacBook', custo: 6400,  precoApple: 13999 },
-      { modelo: 'MacBook Air M5 13" 16/1TB',       categoria: 'MacBook', custo: 8500,  precoApple: 16399 },
-      { modelo: 'MacBook Air M5 15" 16/512',       categoria: 'MacBook', custo: 8600,  precoApple: 14999 },
-      { modelo: 'MacBook Air M5 15" 16/1TB',       categoria: 'MacBook', custo: 11000, precoApple: 17399 },
-      { modelo: 'MacBook Pro M5 14" 16/512',       categoria: 'MacBook', custo: 9600,  precoApple: 19999 },
-      { modelo: 'MacBook Pro M5 16" 24/1TB',       categoria: 'MacBook', custo: 18700, precoApple: 32999 },
-      { modelo: 'MacBook Pro M5 Pro 14" 24/1TB',   categoria: 'MacBook', custo: 14500, precoApple: 26999 },
-      { modelo: 'MacBook Pro M5 Pro 16" 24/1TB',   categoria: 'MacBook', custo: 18600, precoApple: 32999 },
-      { modelo: 'MacBook Pro M5 Max 16" 36/2TB',   categoria: 'MacBook', custo: 27600, precoApple: 49999 },
-
-      // Apple Watch (margem 25%)
-      { modelo: 'Apple Watch SE3 40mm',  categoria: 'Apple Watch', custo: 1500, precoApple: 3299 },
-      { modelo: 'Apple Watch SE3 44mm',  categoria: 'Apple Watch', custo: 1750, precoApple: 3599 },
-      { modelo: 'Apple Watch S11 42mm',  categoria: 'Apple Watch', custo: 1900, precoApple: 5499 },
-      { modelo: 'Apple Watch S11 46mm',  categoria: 'Apple Watch', custo: 2150, precoApple: 5999 },
-      { modelo: 'Apple Watch Ultra 3',   categoria: 'Apple Watch', custo: 4500, precoApple: 10499 },
-
-      // AirPods (margem 30%)
-      { modelo: 'AirPods Pro 3',  categoria: 'AirPods', custo: 1350, precoApple: 2699 },
-      { modelo: 'AirPods 4',      categoria: 'AirPods', custo: 650,  precoApple: 1499 },
-      { modelo: 'AirPods Max 2',  categoria: 'AirPods', custo: 3600, precoApple: 6590 },
-
-      // AirTag (margem 50%, sem frete)
-      { modelo: 'AirTag 1uni',  categoria: 'AirTag', custo: 150, precoApple: 449 },
-      { modelo: 'AirTag 4uni',  categoria: 'AirTag', custo: 450, precoApple: 1599 },
-    ];
-
-    const MARGENS = {
-      'iPhone': 0.10, 'iPad': 0.20, 'MacBook': 0.20,
-      'Apple Watch': 0.25, 'AirPods': 0.30, 'AirTag': 0.50,
-    };
-
-    const CATEGORIA_ORDER = ['iPhone', 'iPad', 'MacBook', 'Apple Watch', 'AirPods', 'AirTag'];
-
-    // ============ ESTADO ============
-    let data = { apple: [], xiaomi: [], month: '', whatsapp: '', lastUpdate: '' };
-    let currentBrand = 'apple';
-
-    // ============ PRICE CALCULATION ============
-    // iPhone "normal" (não-Pro): 15% · iPhone Pro/Pro Max: 10% (mantém competitivo no top)
-    function getMargem(item) {
-      if (item.categoria === 'iPhone') {
-        return item.modelo.toLowerCase().includes('pro') ? 0.10 : 0.15;
-      }
-      return MARGENS[item.categoria] || 0.20;
-    }
-
-    function calcularPrecoNovo(item) {
-      const margem = getMargem(item);
-      const frete = item.categoria === 'AirTag' ? 0 : 100;
-      return item.custo * (1 + margem) + frete;
-    }
-
-    function calcularParcela(precoVenda) {
-      return Math.floor(precoVenda * 1.15 / 12);
-    }
-
-    function calcularEconomia(precoApple, precoFTM) {
-      if (!precoApple) return null;
-      const economia = Math.round(precoApple - precoFTM);
-      if (economia <= 0) return null;
-      const percent = Math.round((economia / precoApple) * 100);
-      return { economia, percent };
-    }
-
-    function getAppleUrl(item) {
-      const cat = item.categoria;
-      const m = item.modelo.toLowerCase();
-      if (cat === 'iPhone') {
-        if (m.includes('17 pro')) return 'https://www.apple.com/br/shop/buy-iphone/iphone-17-pro';
-        if (m.includes('17')) return 'https://www.apple.com/br/shop/buy-iphone/iphone-17';
-        if (m.includes('16')) return 'https://www.apple.com/br/shop/buy-iphone/iphone-16';
-        return null;
-      }
-      if (cat === 'iPad') {
-        if (m.includes('pro')) return 'https://www.apple.com/br/shop/buy-ipad/ipad-pro';
-        if (m.includes('air')) return 'https://www.apple.com/br/shop/buy-ipad/ipad-air';
-        return 'https://www.apple.com/br/shop/buy-ipad/ipad';
-      }
-      if (cat === 'MacBook') {
-        if (m.includes('neo')) return 'https://www.apple.com/br/shop/buy-mac/macbook-neo';
-        if (m.includes('pro')) return 'https://www.apple.com/br/shop/buy-mac/macbook-pro';
-        return 'https://www.apple.com/br/shop/buy-mac/macbook-air';
-      }
-      if (cat === 'Apple Watch') {
-        if (m.includes('ultra')) return 'https://www.apple.com/br/shop/buy-watch/apple-watch-ultra';
-        if (m.includes('se')) return 'https://www.apple.com/br/shop/buy-watch/apple-watch-se';
-        return 'https://www.apple.com/br/shop/buy-watch/apple-watch';
-      }
-      if (cat === 'AirPods') {
-        if (m.includes('pro')) return 'https://www.apple.com/br/shop/buy-airpods/airpods-pro-3';
-        if (m.includes('max')) return 'https://www.apple.com/br/shop/buy-airpods/airpods-max';
-        return 'https://www.apple.com/br/shop/buy-airpods/airpods-4';
-      }
-      if (cat === 'AirTag') return 'https://www.apple.com/br/shop/buy-airtag';
-      return null;
-    }
-
-    function formatBR(n) {
-      return Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-    }
-
-    // ============ LOAD ============
-    async function load(showSpinner) {
-      if (showSpinner && currentBrand !== 'novos') {
-        document.getElementById('content').innerHTML =
-          '<div class="text-center py-20 font-black uppercase tracking-[0.2em] text-ink/40">Atualizando...</div>';
-      }
-      try {
-        const res = await fetch(API_URL, { cache: 'no-store' });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const json = await res.json();
-        onLoad(json);
-      } catch (err) {
-        onError(err);
-      }
-    }
-
-    function onLoad(result) {
-      data = result;
-      updateSubtitle();
-      document.getElementById('footerText').textContent =
-        'Atualização automática a cada 60s · Última: ' + result.lastUpdate;
-      render();
-    }
-
-    function onError(err) {
-      if (currentBrand === 'novos') {
-        updateSubtitle();
-        render();
-        return;
-      }
-      document.getElementById('content').innerHTML =
-        '<div class="text-center py-20 font-black uppercase tracking-[0.2em] text-red-700">⚠ ERRO: ' + (err.message || err) + '</div>';
-    }
-
-    function updateSubtitle() {
-      const sub = document.getElementById('subtitle');
-      if (currentBrand === 'novos') {
-        sub.innerHTML = 'Apple novos<br>Lançamentos com preço de importação';
-      } else if (data.month) {
-        sub.innerHTML = 'Estoque ' + data.month + '<br>Atualizado ' + data.lastUpdate;
-      }
-    }
-
-    // ============ TABS + MENU COLAPSADO ============
-    const TABS_AUTO_COLLAPSE_MS = 15000;
-    let collapseTimer = null;
-
-    function startCollapseTimer() {
-      collapseTimer = setTimeout(collapseTabs, TABS_AUTO_COLLAPSE_MS);
-    }
-
-    function collapseTabs() {
-      if (collapseTimer) { clearTimeout(collapseTimer); collapseTimer = null; }
-      const exp = document.getElementById('tabs-expanded');
-      const col = document.getElementById('tabs-collapsed');
-      if (exp && !exp.classList.contains('hidden')) {
-        exp.classList.add('hidden');
-        col.classList.remove('hidden');
-      }
-    }
-
-    // Dropdown do menu colapsado
-    function toggleMenu(e) {
-      if (e) e.stopPropagation();
-      const dd = document.getElementById('menu-dropdown');
-      const arrow = document.getElementById('menu-arrow');
-      if (dd.classList.contains('hidden')) {
-        dd.classList.remove('hidden');
-        arrow.classList.add('arrow-open');
-        updateMenuSelected();
-      } else {
-        dd.classList.add('hidden');
-        arrow.classList.remove('arrow-open');
-      }
-    }
-
-    function closeMenu() {
-      const dd = document.getElementById('menu-dropdown');
-      const arrow = document.getElementById('menu-arrow');
-      if (dd) dd.classList.add('hidden');
-      if (arrow) arrow.classList.remove('arrow-open');
-    }
-
-    function updateMenuSelected() {
-      document.querySelectorAll('.menu-item').forEach(b => {
-        const isActive = b.dataset.brand === currentBrand;
-        b.classList.toggle('bg-blue', isActive);
-        b.classList.toggle('text-white', isActive);
-        b.classList.toggle('hover:bg-yellow', !isActive);
-      });
-    }
-
-    document.addEventListener('click', (e) => {
-      const trigger = document.getElementById('menu-trigger');
-      const dd = document.getElementById('menu-dropdown');
-      if (trigger && dd && !trigger.contains(e.target) && !dd.contains(e.target)) {
-        closeMenu();
-      }
+    document.querySelectorAll('.wpp-cta').forEach(el => {
+      const msg = el.getAttribute('data-msg') || 'Olá! Cheguei pelo site da FTM Imports.';
+      el.href = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(msg);
+      el.target = '_blank';
+      el.rel = 'noopener';
     });
-
-    function setBrand(brand) {
-      currentBrand = brand;
-      // Marca tab ativo em azul (caso tabs ainda visíveis)
-      document.querySelectorAll('.brand-tab').forEach(b => {
-        const isActive = b.dataset.brand === brand;
-        b.classList.toggle('bg-blue', isActive);
-        b.classList.toggle('text-white', isActive);
-        b.classList.toggle('bg-white', !isActive);
-        b.classList.toggle('text-ink', !isActive);
-      });
-      // Atualiza label do menu colapsado
-      const labels = {
-        'apple':  'Apple <span class="opacity-60">(Seminovos)</span>',
-        'novos':  'Apple <span class="opacity-60">(Novos)</span>',
-        'xiaomi': 'Android <span class="opacity-60">(Novos)</span>',
-      };
-      const lbl = document.getElementById('current-label');
-      if (lbl) lbl.innerHTML = labels[brand];
-      closeMenu();
-      // Primeiro clique colapsa imediatamente (cliente já interagiu)
-      collapseTabs();
-      document.getElementById('search').value = '';
-      updateSubtitle();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      render();
-    }
-
-    // ============ RENDER ============
-    function render() {
-      if (currentBrand === 'novos') renderNovos();
-      else renderSeminovos();
-    }
-
-    function renderSeminovos() {
-      const list = data[currentBrand] || [];
-      const search = document.getElementById('search').value.trim().toLowerCase();
-      const filtered = search
-        ? list.filter(it => (it.modelo + ' ' + it.cor).toLowerCase().includes(search))
-        : list;
-
-      const content = document.getElementById('content');
-      const count = document.getElementById('count');
-
-      if (filtered.length === 0) {
-        count.textContent = '';
-        content.innerHTML = '<div class="text-center py-20 font-black uppercase tracking-[0.2em] text-ink/40">' +
-          (search ? 'Nenhum produto encontrado' : 'Nenhum produto em estoque') + '</div>';
-        return;
-      }
-
-      const totalUnits = currentBrand === 'xiaomi'
-        ? filtered.reduce((s, it) => s + (it.quantity || 1), 0)
-        : filtered.length;
-
-      count.textContent = totalUnits + (totalUnits === 1 ? ' UNIDADE DISPONÍVEL' : ' UNIDADES DISPONÍVEIS');
-      content.innerHTML =
-        '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6 lg:gap-7">' +
-        filtered.map((item, i) => cardSeminovo(item, i)).join('') +
-        '</div>';
-    }
-
-    function renderNovos() {
-      const search = document.getElementById('search').value.trim().toLowerCase();
-      const filtered = search
-        ? NOVOS_DATA.filter(it => (it.modelo + ' ' + it.categoria).toLowerCase().includes(search))
-        : NOVOS_DATA;
-
-      const content = document.getElementById('content');
-      const count = document.getElementById('count');
-
-      if (filtered.length === 0) {
-        count.textContent = '';
-        content.innerHTML = '<div class="text-center py-20 font-black uppercase tracking-[0.2em] text-ink/40">Nenhum produto encontrado</div>';
-        return;
-      }
-
-      count.textContent = filtered.length + ' PRODUTOS NOVOS DISPONÍVEIS';
-
-      const grouped = {};
-      filtered.forEach(it => {
-        if (!grouped[it.categoria]) grouped[it.categoria] = [];
-        grouped[it.categoria].push(it);
-      });
-
-      let html = '';
-      CATEGORIA_ORDER.forEach(cat => {
-        if (!grouped[cat]) return;
-        html += '<section class="mb-10 sm:mb-14">' +
-          '<h2 class="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tighter mb-4 sm:mb-6 inline-block px-4 py-2 bg-ink text-yellow">' + cat + '</h2>' +
-          '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6 lg:gap-7">' +
-          grouped[cat].map((item, i) => cardNovo(item, i)).join('') +
-          '</div>' +
-        '</section>';
-      });
-      content.innerHTML = html;
-    }
-
-    // ============ CORNERS ============
-    function corner(i) {
-      const variants = [
-        '<div class="absolute -top-2.5 -right-2.5 w-5 h-5 bg-yellow border-2 border-ink rounded-full"></div>',
-        '<div class="absolute -top-2.5 -right-2.5 w-5 h-5 bg-blue border-2 border-ink"></div>',
-        '<svg class="absolute -top-2.5 -right-2.5 w-6 h-6" viewBox="0 0 20 20"><polygon points="10,1 19,18 1,18" fill="#F0C020" stroke="#121212" stroke-width="2" stroke-linejoin="round"/></svg>',
-      ];
-      return variants[i % variants.length];
-    }
-
-    // Badge AZUL de economia (cor do logo, contrasta com o verde do WhatsApp)
-    function cornerNovo(item) {
-      const economia = calcularEconomia(item.precoApple, calcularPrecoNovo(item));
-      if (!economia) return ''; // sem badge se não tem comparação Apple
-      return '' +
-        '<div class="absolute -top-3 -right-3 bg-blue text-white border-2 border-ink shadow-[3px_3px_0px_0px_#121212] px-3 py-1.5 z-10 text-center">' +
-          '<p class="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.15em] leading-none mb-0.5 opacity-90">Economize</p>' +
-          '<p class="text-base sm:text-lg font-black tracking-tight leading-none">R$ ' + formatBR(economia.economia) + '</p>' +
-          '<p class="text-[10px] sm:text-[11px] font-black tracking-tight leading-none mt-0.5 opacity-90">' + economia.percent + '% OFF</p>' +
-        '</div>';
-    }
-
-    // ============ CARD: SEMINOVO ============
-    function cardSeminovo(item, i) {
-      const isApple = item.brand === 'apple';
-      const meta = isApple
-        ? capitalize(item.cor) + (item.bateria !== null ? ' · BAT ' + item.bateria + '%' : '')
-        : capitalize(item.cor);
-
-      const qtyBadge = !isApple && item.quantity > 1
-        ? '<span class="inline-flex items-center self-start bg-blue text-white px-2.5 py-1 text-[10px] font-black uppercase tracking-wider border-2 border-ink mb-3">✓ ' + item.quantity + ' unid.</span>'
-        : '';
-
-      const wppMsg = 'Olá! Tenho interesse no ' + item.modelo + ' ' + capitalize(item.cor) +
-                     (isApple && item.bateria !== null ? ' (Bateria ' + item.bateria + '%)' : '') +
-                     '. Pode me passar o valor?\n\nRef: ' + item.code;
-      const wppLink = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(wppMsg);
-
-      return '' +
-        '<article class="lift relative bg-white border-2 sm:border-4 border-ink shadow-[6px_6px_0px_0px_#121212] sm:shadow-[8px_8px_0px_0px_#121212] p-5 sm:p-6 flex flex-col">' +
-          corner(i) +
-          '<h3 class="text-lg sm:text-xl font-black uppercase leading-tight tracking-tight mb-1.5">' + escapeHtml(item.modelo) + '</h3>' +
-          '<p class="text-xs sm:text-sm font-bold uppercase tracking-wider text-ink/70 mb-3">' + escapeHtml(meta) + '</p>' +
-          qtyBadge +
-          '<p class="text-[10px] font-mono text-ink/30 mt-auto mb-4 tracking-wider">REF: ' + escapeHtml(item.code) + '</p>' +
-          whatsappBtn(wppLink) +
-        '</article>';
-    }
-
-    // ============ CARD: NOVO ============
-    function cardNovo(item, i) {
-      const precoFTM = calcularPrecoNovo(item);  // valor à vista (Pix)
-      const parcela = calcularParcela(precoFTM); // 12x sem juros
-      const appleUrl = getAppleUrl(item);
-
-      const wppMsg = 'Olá! Tenho interesse no ' + item.modelo + ' (NOVO/LACRADO). Vi por R$ ' + formatBR(precoFTM) + ' no Pix ou 12x R$ ' + formatBR(parcela) + ' sem juros. Posso fechar?';
-      const wppLink = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(wppMsg);
-
-      let appleLine;
-      if (item.precoApple) {
-        appleLine = appleUrl
-          ? '<a href="' + appleUrl + '" target="_blank" rel="noopener" class="block text-xs font-bold uppercase tracking-wider text-ink/50 line-through mb-3 hover:text-blue hover:no-underline transition-colors">Site Oficial Apple R$ ' + formatBR(item.precoApple) + ' ↗</a>'
-          : '<p class="text-xs font-bold uppercase tracking-wider text-ink/50 line-through mb-3">Site Oficial Apple R$ ' + formatBR(item.precoApple) + '</p>';
-      } else {
-        appleLine = '<p class="text-[10px] font-bold uppercase tracking-wider text-blue mb-3">Modelo descontinuado pela Apple</p>';
-      }
-
-      // Badge amarelo com a parcela (CTA principal)
-      const parcelaBadge = '' +
-        '<div class="bg-yellow border-2 border-ink py-3 px-3 mb-3 text-center">' +
-          '<p class="text-2xl sm:text-3xl font-black tracking-tight leading-none">12x R$ ' + formatBR(parcela) + '</p>' +
-          '<p class="text-[10px] sm:text-xs font-black uppercase tracking-wider mt-1 leading-tight">SEM JUROS no cartão</p>' +
-        '</div>';
-
-      // Linha do Pix com desconto (alternativa pra quem paga à vista)
-      const pixLine = '' +
-        '<p class="text-center text-xs sm:text-sm font-bold tracking-wider mb-4">' +
-          '<span class="text-ink/70">ou </span>' +
-          '<span class="font-black">R$ ' + formatBR(precoFTM) + '</span>' +
-          '<span class="text-ink/70"> no Pix · </span>' +
-          '<span class="font-black text-blue">13% OFF</span>' +
-        '</p>';
-
-      return '' +
-        '<article class="lift relative bg-white border-2 sm:border-4 border-ink shadow-[6px_6px_0px_0px_#121212] sm:shadow-[8px_8px_0px_0px_#121212] p-5 sm:p-6 flex flex-col">' +
-          cornerNovo(item) +
-          '<h3 class="text-lg sm:text-xl font-black uppercase leading-tight tracking-tight mb-3 pr-16">' + escapeHtml(item.modelo) + '</h3>' +
-          appleLine +
-          parcelaBadge +
-          pixLine +
-          '<div class="mt-auto">' +
-          whatsappBtn(wppLink) +
-          '</div>' +
-        '</article>';
-    }
-
-    // ============ HELPERS ============
-    function whatsappBtn(href) {
-      return '<a href="' + href + '" target="_blank" rel="noopener" ' +
-        'class="press bg-wpp text-white border-2 sm:border-[3px] border-ink shadow-[4px_4px_0px_0px_#121212] py-2.5 sm:py-3 px-4 text-center font-black uppercase tracking-wider text-sm flex items-center justify-center gap-2">' +
-        '<svg viewBox="0 0 24 24" class="w-4 h-4 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>' +
-        'Falar no WhatsApp' +
-        '</a>';
-    }
-
-    function capitalize(s) {
-      if (!s) return '';
-      return String(s).toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
-    }
-
-    function escapeHtml(s) {
-      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-    }
-
-    // ============ TRADE-IN POPUP ============
-    function maybeShowTradeIn() {
-      try {
-        if (localStorage.getItem('ftm-trade-in-shown') === '1') return;
-      } catch (e) { return; }
-
-      const wppLink = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(
-        'Olá! Gostaria de avaliar meu aparelho usado para usar como parte do pagamento de um produto novo. É um [iPhone/MacBook/...]. Pode me ajudar?'
-      );
-      document.getElementById('trade-in-cta').href = wppLink;
-
-      setTimeout(() => {
-        document.getElementById('trade-in-modal').classList.remove('hidden');
-      }, 2500);
-    }
-
-    function closeTradeIn() {
-      document.getElementById('trade-in-modal').classList.add('hidden');
-      try { localStorage.setItem('ftm-trade-in-shown', '1'); } catch (e) {}
-    }
-
-    // Close modal on ESC key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeTradeIn();
-    });
-
-    // ============ INIT ============
-    load();
-    setInterval(() => load(false), 60000);
-    maybeShowTradeIn();
-    startCollapseTimer();
   </script>
+
 </body>
 </html>
