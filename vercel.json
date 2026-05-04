@@ -1,6 +1,7 @@
 {
   "redirects": [
-    { "source": "/", "destination": "/ftmimports", "permanent": false }
+    { "source": "/", "destination": "/ftmimports", "permanent": false },
+    { "source": "/ftmimports/macbook-air-m5/:path*", "destination": "/ftmimports/blog/macbook-air-m5/:path*", "permanent": true }
   ],
   "cleanUrls": true
 }
