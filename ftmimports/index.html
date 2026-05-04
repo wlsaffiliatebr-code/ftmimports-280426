@@ -60,19 +60,19 @@
         </div>
       </div>
 
-      <!-- Toggle: Apple / Android / Novos -->
-      <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-3 sm:mb-4">
+      <!-- Toggle: Apple Seminovos / Apple Novos / Android Novos -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 mb-3 sm:mb-4">
         <button id="btn-apple" onclick="setBrand('apple')"
-                class="press bg-yellow text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 px-2 sm:px-3 font-black uppercase tracking-[0.15em] text-xs sm:text-sm">
-          Apple
-        </button>
-        <button id="btn-xiaomi" onclick="setBrand('xiaomi')"
-                class="press bg-white text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 px-2 sm:px-3 font-black uppercase tracking-[0.15em] text-xs sm:text-sm">
-          Android
+                class="press bg-yellow text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 px-2 sm:px-3 font-black uppercase tracking-[0.1em] text-xs sm:text-sm">
+          Apple <span class="text-[10px] sm:text-[11px] opacity-70">(Seminovos)</span>
         </button>
         <button id="btn-novos" onclick="setBrand('novos')"
-                class="press bg-white text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 px-2 sm:px-3 font-black uppercase tracking-[0.15em] text-xs sm:text-sm">
-          Novos
+                class="press bg-white text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 px-2 sm:px-3 font-black uppercase tracking-[0.1em] text-xs sm:text-sm">
+          Apple <span class="text-[10px] sm:text-[11px] opacity-70">(Novos)</span>
+        </button>
+        <button id="btn-xiaomi" onclick="setBrand('xiaomi')"
+                class="press bg-white text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 px-2 sm:px-3 font-black uppercase tracking-[0.1em] text-xs sm:text-sm">
+          Android <span class="text-[10px] sm:text-[11px] opacity-70">(Novos)</span>
         </button>
       </div>
 
@@ -195,6 +195,40 @@
     function calcularPrecoNovo(item) {
       const margem = MARGENS[item.categoria] || 0.20;
       return roundUp(item.custo * (1 + margem));
+    }
+
+    // Mapeia produto pra URL da página oficial da Apple BR
+    function getAppleUrl(item) {
+      const cat = item.categoria;
+      const m = item.modelo.toLowerCase();
+      if (cat === 'iPhone') {
+        if (m.includes('17 pro')) return 'https://www.apple.com/br/shop/buy-iphone/iphone-17-pro';
+        if (m.includes('17')) return 'https://www.apple.com/br/shop/buy-iphone/iphone-17';
+        if (m.includes('16')) return 'https://www.apple.com/br/shop/buy-iphone/iphone-16';
+        return null;
+      }
+      if (cat === 'iPad') {
+        if (m.includes('pro')) return 'https://www.apple.com/br/shop/buy-ipad/ipad-pro';
+        if (m.includes('air')) return 'https://www.apple.com/br/shop/buy-ipad/ipad-air';
+        return 'https://www.apple.com/br/shop/buy-ipad/ipad';
+      }
+      if (cat === 'MacBook') {
+        if (m.includes('neo')) return 'https://www.apple.com/br/shop/buy-mac/macbook-neo';
+        if (m.includes('pro')) return 'https://www.apple.com/br/shop/buy-mac/macbook-pro';
+        return 'https://www.apple.com/br/shop/buy-mac/macbook-air';
+      }
+      if (cat === 'Apple Watch') {
+        if (m.includes('ultra')) return 'https://www.apple.com/br/shop/buy-watch/apple-watch-ultra';
+        if (m.includes('se')) return 'https://www.apple.com/br/shop/buy-watch/apple-watch-se';
+        return 'https://www.apple.com/br/shop/buy-watch/apple-watch';
+      }
+      if (cat === 'AirPods') {
+        if (m.includes('pro')) return 'https://www.apple.com/br/shop/buy-airpods/airpods-pro-3';
+        if (m.includes('max')) return 'https://www.apple.com/br/shop/buy-airpods/airpods-max';
+        return 'https://www.apple.com/br/shop/buy-airpods/airpods-4';
+      }
+      if (cat === 'AirTag') return 'https://www.apple.com/br/shop/buy-airtag';
+      return null;
     }
 
     function calcularEconomia(precoApple, precoFTM) {
@@ -395,10 +429,14 @@
       const wppMsg = 'Olá! Tenho interesse no ' + item.modelo + ' (NOVO/LACRADO). Vi por R$ ' + formatBR(precoFTM) + '. Está disponível?';
       const wppLink = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(wppMsg);
 
+      const appleUrl = getAppleUrl(item);
       let priceBlock;
       if (economia) {
+        const appleLine = appleUrl
+          ? '<a href="' + appleUrl + '" target="_blank" rel="noopener" class="block text-xs font-bold uppercase tracking-wider text-ink/50 line-through mb-1 hover:text-blue hover:no-underline transition-colors">Site Oficial Apple R$ ' + formatBR(item.precoApple) + ' ↗</a>'
+          : '<p class="text-xs font-bold uppercase tracking-wider text-ink/50 line-through mb-1">Site Oficial Apple R$ ' + formatBR(item.precoApple) + '</p>';
         priceBlock = '' +
-          '<p class="text-xs font-bold uppercase tracking-wider text-ink/50 line-through mb-1">Site Oficial Apple R$ ' + formatBR(item.precoApple) + '</p>' +
+          appleLine +
           '<p class="text-3xl sm:text-4xl font-black tracking-tighter mb-3 leading-none">R$ ' + formatBR(precoFTM) + '</p>' +
           '<div class="bg-yellow border-2 border-ink py-2 px-3 mb-4 text-center">' +
             '<p class="text-[10px] sm:text-xs font-black uppercase tracking-wider leading-tight">Economize R$ ' + formatBR(economia.economia) + '</p>' +
