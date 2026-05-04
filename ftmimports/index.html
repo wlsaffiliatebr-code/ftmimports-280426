@@ -128,8 +128,8 @@
       // iPad (margem 20%)
       { modelo: 'iPad 11 128GB',                  categoria: 'iPad', custo: 2000, precoApple: 4499 },
       { modelo: 'iPad 11 256GB',                  categoria: 'iPad', custo: 2700, precoApple: 5499 },
-      { modelo: 'iPad Air M3 11" 128GB Wi-Fi',    categoria: 'iPad', custo: 3400, precoApple: 6499 },
-      { modelo: 'iPad Air M3 13" 128GB Wi-Fi',    categoria: 'iPad', custo: 4500, precoApple: 8499 },
+      { modelo: 'iPad Air M3 11" 128GB Wi-Fi',    categoria: 'iPad', custo: 3400, precoApple: 7499 },
+      { modelo: 'iPad Air M3 13" 128GB Wi-Fi',    categoria: 'iPad', custo: 4500, precoApple: 9499 },
       { modelo: 'iPad Air M4 11" 128GB Wi-Fi',    categoria: 'iPad', custo: 3500, precoApple: 7499 },
       { modelo: 'iPad Air M4 13" 128GB Wi-Fi',    categoria: 'iPad', custo: 4700, precoApple: 9499 },
       { modelo: 'iPad Pro M4 11" 256GB Wi-Fi',    categoria: 'iPad', custo: 5500, precoApple: 13499 },
@@ -138,8 +138,8 @@
       { modelo: 'iPad Pro M5 13" 256GB Wi-Fi',    categoria: 'iPad', custo: 8000, precoApple: 17499 },
 
       // MacBook (margem 20%)
-      { modelo: 'MacBook Neo 13" 8/256',           categoria: 'MacBook', custo: 3950,  precoApple: null },
-      { modelo: 'MacBook Neo 13" 8/512',           categoria: 'MacBook', custo: 4500,  precoApple: null },
+      { modelo: 'MacBook Neo 13" 8/256',           categoria: 'MacBook', custo: 3950,  precoApple: 7299 },
+      { modelo: 'MacBook Neo 13" 8/512',           categoria: 'MacBook', custo: 4500,  precoApple: 8499 },
       { modelo: 'MacBook Air M5 13" 16/512',       categoria: 'MacBook', custo: 6400,  precoApple: 13999 },
       { modelo: 'MacBook Air M5 13" 16/1TB',       categoria: 'MacBook', custo: 8500,  precoApple: 16399 },
       { modelo: 'MacBook Air M5 15" 16/512',       categoria: 'MacBook', custo: 8600,  precoApple: 14999 },
@@ -398,7 +398,7 @@
       let priceBlock;
       if (economia) {
         priceBlock = '' +
-          '<p class="text-xs font-bold uppercase tracking-wider text-ink/50 line-through mb-1">Apple Store R$ ' + formatBR(item.precoApple) + '</p>' +
+          '<p class="text-xs font-bold uppercase tracking-wider text-ink/50 line-through mb-1">Site Oficial Apple R$ ' + formatBR(item.precoApple) + '</p>' +
           '<p class="text-3xl sm:text-4xl font-black tracking-tighter mb-3 leading-none">R$ ' + formatBR(precoFTM) + '</p>' +
           '<div class="bg-yellow border-2 border-ink py-2 px-3 mb-4 text-center">' +
             '<p class="text-[10px] sm:text-xs font-black uppercase tracking-wider leading-tight">Economize R$ ' + formatBR(economia.economia) + '</p>' +
