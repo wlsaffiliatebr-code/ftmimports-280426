@@ -62,23 +62,34 @@
   <header class="bg-white border-b-4 border-ink sticky top-0 z-40 dot-grid">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
 
-      <!-- Logo + Brand title -->
-      <div class="flex items-center gap-4 sm:gap-6 mb-4 sm:mb-6">
-        <a href="/" class="flex-shrink-0">
-          <img src="/ftmimports/img/logo.png" alt="FTM Imports" class="h-16 sm:h-20 lg:h-24 w-auto" />
-        </a>
-        <div class="flex-1 min-w-0">
-          <h1 class="text-3xl sm:text-4xl lg:text-6xl font-black uppercase leading-[0.9] tracking-tighter">
-            FTM Imports
-          </h1>
-          <p class="text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] mt-1 sm:mt-2 text-ink/70" id="subtitle">
-            Estoque em tempo real
-          </p>
-        </div>
+      <!-- Brand title (sem logo) -->
+      <div class="text-center sm:text-left mb-4 sm:mb-6">
+        <h1 class="text-4xl sm:text-5xl lg:text-7xl font-black uppercase leading-[0.9] tracking-tighter">
+          FTM Imports
+        </h1>
+        <p class="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] mt-1 sm:mt-2 text-ink/70" id="subtitle">
+          Estoque em tempo real
+        </p>
       </div>
 
-      <!-- Menu dropdown collapsible -->
-      <div class="relative mb-3 sm:mb-4">
+      <!-- Tabs visíveis nos primeiros 15s (ou até primeiro clique) -->
+      <div id="tabs-expanded" class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 mb-3 sm:mb-4">
+        <button data-brand="apple"  onclick="setBrand('apple')"
+                class="brand-tab press bg-blue text-white border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 px-2 sm:px-3 font-black uppercase tracking-[0.1em] text-xs sm:text-sm">
+          Apple <span class="text-[10px] sm:text-[11px] opacity-70">(Seminovos)</span>
+        </button>
+        <button data-brand="novos"  onclick="setBrand('novos')"
+                class="brand-tab press bg-white text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 px-2 sm:px-3 font-black uppercase tracking-[0.1em] text-xs sm:text-sm">
+          Apple <span class="text-[10px] sm:text-[11px] opacity-70">(Novos)</span>
+        </button>
+        <button data-brand="xiaomi" onclick="setBrand('xiaomi')"
+                class="brand-tab press bg-white text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 px-2 sm:px-3 font-black uppercase tracking-[0.1em] text-xs sm:text-sm">
+          Android <span class="text-[10px] sm:text-[11px] opacity-70">(Novos)</span>
+        </button>
+      </div>
+
+      <!-- Menu colapsado (aparece após 15s ou após primeiro clique) -->
+      <div id="tabs-collapsed" class="relative mb-3 sm:mb-4 hidden">
         <button id="menu-trigger" onclick="toggleMenu(event)"
                 class="press w-full bg-blue text-white border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 px-4 flex items-center justify-between gap-3">
           <div class="flex-1 text-left">
@@ -87,7 +98,6 @@
           </div>
           <span id="menu-arrow" class="menu-arrow text-lg sm:text-xl font-black flex-shrink-0">▼</span>
         </button>
-
         <div id="menu-dropdown" class="hidden mt-2 bg-white border-2 sm:border-4 border-ink shadow-[4px_4px_0px_0px_#121212] sm:shadow-[6px_6px_0px_0px_#121212]">
           <button data-brand="apple"  onclick="setBrand('apple')"  class="menu-item press block w-full text-left px-5 py-4 font-black uppercase tracking-[0.15em] text-sm hover:bg-yellow border-b-2 border-ink/10">
             Apple <span class="opacity-60">(Seminovos)</span>
@@ -232,8 +242,16 @@
     let currentBrand = 'apple';
 
     // ============ PRICE CALCULATION ============
+    // iPhone "normal" (não-Pro): 15% · iPhone Pro/Pro Max: 10% (mantém competitivo no top)
+    function getMargem(item) {
+      if (item.categoria === 'iPhone') {
+        return item.modelo.toLowerCase().includes('pro') ? 0.10 : 0.15;
+      }
+      return MARGENS[item.categoria] || 0.20;
+    }
+
     function calcularPrecoNovo(item) {
-      const margem = MARGENS[item.categoria] || 0.20;
+      const margem = getMargem(item);
       const frete = item.categoria === 'AirTag' ? 0 : 100;
       return item.custo * (1 + margem) + frete;
     }
@@ -330,7 +348,25 @@
       }
     }
 
-    // ============ MENU ============
+    // ============ TABS + MENU COLAPSADO ============
+    const TABS_AUTO_COLLAPSE_MS = 15000;
+    let collapseTimer = null;
+
+    function startCollapseTimer() {
+      collapseTimer = setTimeout(collapseTabs, TABS_AUTO_COLLAPSE_MS);
+    }
+
+    function collapseTabs() {
+      if (collapseTimer) { clearTimeout(collapseTimer); collapseTimer = null; }
+      const exp = document.getElementById('tabs-expanded');
+      const col = document.getElementById('tabs-collapsed');
+      if (exp && !exp.classList.contains('hidden')) {
+        exp.classList.add('hidden');
+        col.classList.remove('hidden');
+      }
+    }
+
+    // Dropdown do menu colapsado
     function toggleMenu(e) {
       if (e) e.stopPropagation();
       const dd = document.getElementById('menu-dropdown');
@@ -345,7 +381,13 @@
       }
     }
 
-    // Marca visualmente o item ativo no dropdown (azul do logo)
+    function closeMenu() {
+      const dd = document.getElementById('menu-dropdown');
+      const arrow = document.getElementById('menu-arrow');
+      if (dd) dd.classList.add('hidden');
+      if (arrow) arrow.classList.remove('arrow-open');
+    }
+
     function updateMenuSelected() {
       document.querySelectorAll('.menu-item').forEach(b => {
         const isActive = b.dataset.brand === currentBrand;
@@ -353,11 +395,6 @@
         b.classList.toggle('text-white', isActive);
         b.classList.toggle('hover:bg-yellow', !isActive);
       });
-    }
-
-    function closeMenu() {
-      document.getElementById('menu-dropdown').classList.add('hidden');
-      document.getElementById('menu-arrow').classList.remove('arrow-open');
     }
 
     document.addEventListener('click', (e) => {
@@ -370,8 +407,25 @@
 
     function setBrand(brand) {
       currentBrand = brand;
-      document.getElementById('current-label').innerHTML = BRAND_LABELS[brand];
+      // Marca tab ativo em azul (caso tabs ainda visíveis)
+      document.querySelectorAll('.brand-tab').forEach(b => {
+        const isActive = b.dataset.brand === brand;
+        b.classList.toggle('bg-blue', isActive);
+        b.classList.toggle('text-white', isActive);
+        b.classList.toggle('bg-white', !isActive);
+        b.classList.toggle('text-ink', !isActive);
+      });
+      // Atualiza label do menu colapsado
+      const labels = {
+        'apple':  'Apple <span class="opacity-60">(Seminovos)</span>',
+        'novos':  'Apple <span class="opacity-60">(Novos)</span>',
+        'xiaomi': 'Android <span class="opacity-60">(Novos)</span>',
+      };
+      const lbl = document.getElementById('current-label');
+      if (lbl) lbl.innerHTML = labels[brand];
       closeMenu();
+      // Primeiro clique colapsa imediatamente (cliente já interagiu)
+      collapseTabs();
       document.getElementById('search').value = '';
       updateSubtitle();
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -499,11 +553,11 @@
 
     // ============ CARD: NOVO ============
     function cardNovo(item, i) {
-      const precoFTM = calcularPrecoNovo(item);
-      const parcela = calcularParcela(precoFTM);
+      const precoFTM = calcularPrecoNovo(item);  // valor à vista (Pix)
+      const parcela = calcularParcela(precoFTM); // 12x sem juros
       const appleUrl = getAppleUrl(item);
 
-      const wppMsg = 'Olá! Tenho interesse no ' + item.modelo + ' (NOVO/LACRADO). Vi por 12x R$ ' + formatBR(parcela) + ' sem juros. Pode me passar o valor no Pix?';
+      const wppMsg = 'Olá! Tenho interesse no ' + item.modelo + ' (NOVO/LACRADO). Vi por R$ ' + formatBR(precoFTM) + ' no Pix ou 12x R$ ' + formatBR(parcela) + ' sem juros. Posso fechar?';
       const wppLink = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(wppMsg);
 
       let appleLine;
@@ -515,13 +569,21 @@
         appleLine = '<p class="text-[10px] font-bold uppercase tracking-wider text-blue mb-3">Modelo descontinuado pela Apple</p>';
       }
 
+      // Badge amarelo com a parcela (CTA principal)
       const parcelaBadge = '' +
         '<div class="bg-yellow border-2 border-ink py-3 px-3 mb-3 text-center">' +
           '<p class="text-2xl sm:text-3xl font-black tracking-tight leading-none">12x R$ ' + formatBR(parcela) + '</p>' +
           '<p class="text-[10px] sm:text-xs font-black uppercase tracking-wider mt-1 leading-tight">SEM JUROS no cartão</p>' +
         '</div>';
 
-      const pixLine = '<p class="text-[11px] sm:text-xs text-center text-ink/60 mb-4 font-bold tracking-wider uppercase">💬 Consulte valor especial no Pix</p>';
+      // Linha do Pix com desconto (alternativa pra quem paga à vista)
+      const pixLine = '' +
+        '<p class="text-center text-xs sm:text-sm font-bold tracking-wider mb-4">' +
+          '<span class="text-ink/70">ou </span>' +
+          '<span class="font-black">R$ ' + formatBR(precoFTM) + '</span>' +
+          '<span class="text-ink/70"> no Pix · </span>' +
+          '<span class="font-black text-blue">13% OFF</span>' +
+        '</p>';
 
       return '' +
         '<article class="lift relative bg-white border-2 sm:border-4 border-ink shadow-[6px_6px_0px_0px_#121212] sm:shadow-[8px_8px_0px_0px_#121212] p-5 sm:p-6 flex flex-col">' +
@@ -584,6 +646,7 @@
     load();
     setInterval(() => load(false), 60000);
     maybeShowTradeIn();
+    startCollapseTimer();
   </script>
 </body>
 </html>
