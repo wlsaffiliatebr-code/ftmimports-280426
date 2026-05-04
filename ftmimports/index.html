@@ -67,7 +67,7 @@
         <h1 class="text-4xl sm:text-5xl lg:text-7xl font-black uppercase leading-[0.9] tracking-tighter">
           FTM Imports
         </h1>
-        <p class="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] mt-1 sm:mt-2 text-ink/70" id="subtitle">
+        <p class="text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] mt-1 sm:mt-2 text-ink/70 text-center leading-relaxed" id="subtitle">
           Estoque em tempo real
         </p>
       </div>
@@ -342,9 +342,9 @@
     function updateSubtitle() {
       const sub = document.getElementById('subtitle');
       if (currentBrand === 'novos') {
-        sub.textContent = 'Apple novos · Lançamentos com preço de importação';
+        sub.innerHTML = 'Apple novos<br>Lançamentos com preço de importação';
       } else if (data.month) {
-        sub.textContent = 'Estoque ' + data.month + ' · Atualizado ' + data.lastUpdate;
+        sub.innerHTML = 'Estoque ' + data.month + '<br>Atualizado ' + data.lastUpdate;
       }
     }
 
