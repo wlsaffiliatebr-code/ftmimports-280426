@@ -51,7 +51,7 @@
 <body class="min-h-screen bg-bg text-ink">
 
   <!-- Faixa azul indicando ATACADO -->
-  <div class="bg-blue text-white border-b-4 border-ink py-2 text-center">
+  <div class="bg-yellow text-white border-b-4 border-ink py-2 text-center">
     <p class="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em]">⚡ Distribuidor · Apenas para lojistas</p>
   </div>
 
@@ -124,7 +124,7 @@
   <footer class="border-t-4 border-ink bg-ink text-white mt-8 sm:mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 text-center">
       <p id="footerText" class="text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] text-white/60 mb-3"></p>
-      <button onclick="load(true)" class="text-xs sm:text-sm font-black uppercase tracking-wider underline decoration-yellow decoration-2 underline-offset-4 hover:text-yellow transition-colors">
+      <button onclick="load(true)" class="text-xs sm:text-sm font-black uppercase tracking-wider underline decoration-white decoration-2 underline-offset-4 hover:text-white transition-colors">
         ↻ Atualizar Agora
       </button>
     </div>
@@ -482,7 +482,7 @@
       CATEGORIA_ORDER.forEach(cat => {
         if (!grouped[cat]) return;
         html += '<section class="mb-10 sm:mb-14">' +
-          '<h2 class="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tighter mb-4 sm:mb-6 inline-block px-4 py-2 bg-ink text-yellow">' + cat + '</h2>' +
+          '<h2 class="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tighter mb-4 sm:mb-6 inline-block px-4 py-2 bg-ink text-white">' + cat + '</h2>' +
           '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6 lg:gap-7">' +
           grouped[cat].map((item, i) => cardNovo(item, i)).join('') +
           '</div>' +
