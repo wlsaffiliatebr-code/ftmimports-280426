@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FTM Imports · Estoque de Celulares</title>
-  <meta name="description" content="Estoque atualizado em tempo real de iPhones e celulares Android. Atendimento via WhatsApp.">
+  <meta name="description" content="Estoque atualizado em tempo real de iPhones, Androids, iPads, MacBooks, Apple Watch e mais. Atendimento via WhatsApp.">
   <meta property="og:title" content="FTM Imports · Estoque de Celulares">
-  <meta property="og:description" content="Atualizado em tempo real · iPhones e Androids · WhatsApp">
+  <meta property="og:description" content="Atualizado em tempo real · Apple e Android · Lançamentos com preço de importação">
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,19 +30,14 @@
   </script>
   <style>
     body { font-family: 'Outfit', sans-serif; background: #F0F0F0; color: #121212; }
-    /* Press effect for buttons (translate + remove shadow) */
     .press { transition: transform .15s ease-out, box-shadow .15s ease-out, background-color .15s ease-out; }
     .press:active { transform: translate(2px, 2px); box-shadow: none !important; }
-    /* Card hover lift */
     .lift { transition: transform .2s ease-out, box-shadow .2s ease-out; }
     .lift:hover { transform: translate(-2px, -4px); box-shadow: 12px 12px 0 0 #121212; }
-    /* Dot grid background pattern for header */
     .dot-grid {
       background-image: radial-gradient(#12121215 1.5px, transparent 1.5px);
       background-size: 18px 18px;
     }
-    /* Hide scrollbar on overflow scroll  */
-    .scroll-clean::-webkit-scrollbar { display: none; }
   </style>
 </head>
 <body class="min-h-screen bg-bg text-ink">
@@ -51,13 +46,10 @@
   <header class="bg-white border-b-4 border-ink sticky top-0 z-50 dot-grid">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
 
-      <!-- Logo + Title row -->
       <div class="flex items-center gap-4 sm:gap-6 mb-4 sm:mb-6">
-        <!-- LOGO FTM -->
         <a href="/" class="flex-shrink-0">
           <img src="/ftmimports/img/logo.png" alt="FTM Imports" class="h-16 sm:h-20 lg:h-24 w-auto" />
         </a>
-
         <div class="flex-1 min-w-0">
           <h1 class="text-2xl sm:text-3xl lg:text-5xl font-black uppercase leading-[0.9] tracking-tighter">
             Estoque de<br>Celulares
@@ -68,20 +60,23 @@
         </div>
       </div>
 
-      <!-- Toggle Apple / Android -->
-      <div class="grid grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4">
+      <!-- Toggle: Apple / Android / Novos -->
+      <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-3 sm:mb-4">
         <button id="btn-apple" onclick="setBrand('apple')"
-                class="press bg-yellow text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 sm:py-3.5 px-3 font-black uppercase tracking-[0.2em] text-sm sm:text-base">
+                class="press bg-yellow text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 px-2 sm:px-3 font-black uppercase tracking-[0.15em] text-xs sm:text-sm">
           Apple
         </button>
         <button id="btn-xiaomi" onclick="setBrand('xiaomi')"
-                class="press bg-white text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 sm:py-3.5 px-3 font-black uppercase tracking-[0.2em] text-sm sm:text-base">
+                class="press bg-white text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 px-2 sm:px-3 font-black uppercase tracking-[0.15em] text-xs sm:text-sm">
           Android
+        </button>
+        <button id="btn-novos" onclick="setBrand('novos')"
+                class="press bg-white text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 px-2 sm:px-3 font-black uppercase tracking-[0.15em] text-xs sm:text-sm">
+          Novos
         </button>
       </div>
 
-      <!-- Search -->
-      <div class="relative">
+      <div id="search-wrap" class="relative">
         <input type="search" id="search" oninput="render()"
                placeholder="BUSCAR MODELO, COR..."
                class="w-full px-4 py-2.5 sm:py-3 bg-white border-2 sm:border-4 border-ink font-bold uppercase tracking-wide text-sm sm:text-base placeholder:text-ink/40 focus:outline-none focus:shadow-[4px_4px_0px_0px_#121212] transition-shadow">
@@ -92,8 +87,8 @@
   <!-- ============ MAIN ============ -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
     <div id="count" class="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] mb-4 sm:mb-6"></div>
-    <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6 lg:gap-7">
-      <div class="col-span-full text-center py-20 font-black uppercase tracking-[0.2em] text-ink/40">
+    <div id="content">
+      <div class="text-center py-20 font-black uppercase tracking-[0.2em] text-ink/40">
         Carregando estoque...
       </div>
     </div>
@@ -112,14 +107,115 @@
   <!-- ============ SCRIPT ============ -->
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrcXMa7mxzOLhikg9E4MxvjQMtLNawa8HIgUlRc46KIHFCcl3w4eYUBTil6prxEtzM/exec';
+    const WHATSAPP = '5551992677191';
 
+    // ============ DADOS DOS PRODUTOS NOVOS ============
+    // custo = preço de custo (interno), precoApple = preço oficial Apple Brasil (null se descontinuado)
+    const NOVOS_DATA = [
+      // iPhones (margem 10%)
+      { modelo: 'iPhone 13 128GB',          categoria: 'iPhone',      custo: 3290, precoApple: null },
+      { modelo: 'iPhone 14 128GB',          categoria: 'iPhone',      custo: 2950, precoApple: null },
+      { modelo: 'iPhone 15 128GB',          categoria: 'iPhone',      custo: 3650, precoApple: null },
+      { modelo: 'iPhone 16 128GB',          categoria: 'iPhone',      custo: 3950, precoApple: 8499 },
+      { modelo: 'iPhone 17 256GB',          categoria: 'iPhone',      custo: 4700, precoApple: 7999 },
+      { modelo: 'iPhone 17 Pro 256GB',      categoria: 'iPhone',      custo: 7250, precoApple: 11499 },
+      { modelo: 'iPhone 17 Pro 512GB',      categoria: 'iPhone',      custo: 7850, precoApple: 12999 },
+      { modelo: 'iPhone 17 Pro 1TB',        categoria: 'iPhone',      custo: 9000, precoApple: 14499 },
+      { modelo: 'iPhone 17 Pro Max 256GB',  categoria: 'iPhone',      custo: 7800, precoApple: 12499 },
+      { modelo: 'iPhone 17 Pro Max 512GB',  categoria: 'iPhone',      custo: 8750, precoApple: 13999 },
+      { modelo: 'iPhone 17 Pro Max 1TB',    categoria: 'iPhone',      custo: 9600, precoApple: 15499 },
+
+      // iPad (margem 20%)
+      { modelo: 'iPad 11 128GB',                  categoria: 'iPad', custo: 2000, precoApple: 4499 },
+      { modelo: 'iPad 11 256GB',                  categoria: 'iPad', custo: 2700, precoApple: 5499 },
+      { modelo: 'iPad Air M3 11" 128GB Wi-Fi',    categoria: 'iPad', custo: 3400, precoApple: 6499 },
+      { modelo: 'iPad Air M3 13" 128GB Wi-Fi',    categoria: 'iPad', custo: 4500, precoApple: 8499 },
+      { modelo: 'iPad Air M4 11" 128GB Wi-Fi',    categoria: 'iPad', custo: 3500, precoApple: 7499 },
+      { modelo: 'iPad Air M4 13" 128GB Wi-Fi',    categoria: 'iPad', custo: 4700, precoApple: 9499 },
+      { modelo: 'iPad Pro M4 11" 256GB Wi-Fi',    categoria: 'iPad', custo: 5500, precoApple: 13499 },
+      { modelo: 'iPad Pro M4 13" 256GB Wi-Fi',    categoria: 'iPad', custo: 7900, precoApple: 16999 },
+      { modelo: 'iPad Pro M5 11" 256GB Wi-Fi',    categoria: 'iPad', custo: 5500, precoApple: 13999 },
+      { modelo: 'iPad Pro M5 13" 256GB Wi-Fi',    categoria: 'iPad', custo: 8000, precoApple: 17499 },
+
+      // MacBook (margem 20%)
+      { modelo: 'MacBook Neo 13" 8/256',           categoria: 'MacBook', custo: 3950,  precoApple: null },
+      { modelo: 'MacBook Neo 13" 8/512',           categoria: 'MacBook', custo: 4500,  precoApple: null },
+      { modelo: 'MacBook Air M5 13" 16/512',       categoria: 'MacBook', custo: 6400,  precoApple: 13999 },
+      { modelo: 'MacBook Air M5 13" 16/1TB',       categoria: 'MacBook', custo: 8500,  precoApple: 16399 },
+      { modelo: 'MacBook Air M5 15" 16/512',       categoria: 'MacBook', custo: 8600,  precoApple: 14999 },
+      { modelo: 'MacBook Air M5 15" 16/1TB',       categoria: 'MacBook', custo: 11000, precoApple: 17399 },
+      { modelo: 'MacBook Pro M5 14" 16/512',       categoria: 'MacBook', custo: 9600,  precoApple: 19999 },
+      { modelo: 'MacBook Pro M5 16" 24/1TB',       categoria: 'MacBook', custo: 18700, precoApple: 32999 },
+      { modelo: 'MacBook Pro M5 Pro 14" 24/1TB',   categoria: 'MacBook', custo: 14500, precoApple: 26999 },
+      { modelo: 'MacBook Pro M5 Pro 16" 24/1TB',   categoria: 'MacBook', custo: 18600, precoApple: 32999 },
+      { modelo: 'MacBook Pro M5 Max 16" 36/2TB',   categoria: 'MacBook', custo: 27600, precoApple: 49999 },
+
+      // Apple Watch (margem 25%)
+      { modelo: 'Apple Watch SE3 40mm',  categoria: 'Apple Watch', custo: 1500, precoApple: 3299 },
+      { modelo: 'Apple Watch SE3 44mm',  categoria: 'Apple Watch', custo: 1750, precoApple: 3599 },
+      { modelo: 'Apple Watch S11 42mm',  categoria: 'Apple Watch', custo: 1900, precoApple: 5499 },
+      { modelo: 'Apple Watch S11 46mm',  categoria: 'Apple Watch', custo: 2150, precoApple: 5999 },
+      { modelo: 'Apple Watch Ultra 3',   categoria: 'Apple Watch', custo: 4500, precoApple: 10499 },
+
+      // AirPods (margem 30%)
+      { modelo: 'AirPods Pro 3',  categoria: 'AirPods', custo: 1350, precoApple: 2699 },
+      { modelo: 'AirPods 4',      categoria: 'AirPods', custo: 650,  precoApple: 1499 },
+      { modelo: 'AirPods Max 2',  categoria: 'AirPods', custo: 3600, precoApple: 6590 },
+
+      // AirTag (margem 50%)
+      { modelo: 'AirTag 1uni',  categoria: 'AirTag', custo: 150, precoApple: 449 },
+      { modelo: 'AirTag 4uni',  categoria: 'AirTag', custo: 450, precoApple: 1599 },
+    ];
+
+    const MARGENS = {
+      'iPhone':      0.10,
+      'iPad':        0.20,
+      'MacBook':     0.20,
+      'Apple Watch': 0.25,
+      'AirPods':     0.30,
+      'AirTag':      0.50,
+    };
+
+    // Ordem das categorias (mais caro/popular primeiro)
+    const CATEGORIA_ORDER = ['iPhone', 'iPad', 'MacBook', 'Apple Watch', 'AirPods', 'AirTag'];
+
+    // ============ ESTADO ============
     let data = { apple: [], xiaomi: [], month: '', whatsapp: '', lastUpdate: '' };
     let currentBrand = 'apple';
 
+    // ============ PRICE CALCULATION ============
+    function roundUp(value) {
+      const remainder = value % 100;
+      const base = value - remainder;
+      if (remainder <= 40) return base + 40;
+      if (remainder <= 90) return base + 90;
+      return base + 100 + 40;
+    }
+
+    function calcularPrecoNovo(item) {
+      const margem = MARGENS[item.categoria] || 0.20;
+      return roundUp(item.custo * (1 + margem));
+    }
+
+    function calcularEconomia(precoApple, precoFTM) {
+      if (!precoApple) return null;
+      const economia = precoApple - precoFTM;
+      const percent = Math.round((economia / precoApple) * 100);
+      return { economia, percent };
+    }
+
+    function formatBR(n) {
+      return Number(n).toLocaleString('pt-BR', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      });
+    }
+
+    // ============ LOAD SEMINOVOS DATA ============
     async function load(showSpinner) {
-      if (showSpinner) {
-        document.getElementById('grid').innerHTML =
-          '<div class="col-span-full text-center py-20 font-black uppercase tracking-[0.2em] text-ink/40">Atualizando...</div>';
+      if (showSpinner && currentBrand !== 'novos') {
+        document.getElementById('content').innerHTML =
+          '<div class="text-center py-20 font-black uppercase tracking-[0.2em] text-ink/40">Atualizando...</div>';
       }
       try {
         const res = await fetch(API_URL, { cache: 'no-store' });
@@ -141,38 +237,66 @@
     }
 
     function onError(err) {
-      document.getElementById('grid').innerHTML =
-        '<div class="col-span-full text-center py-20 font-black uppercase tracking-[0.2em] text-red-700">⚠ ERRO: ' + (err.message || err) + '</div>';
+      // Não bloqueia se estamos em modo NOVOS (dados são locais)
+      if (currentBrand === 'novos') {
+        document.getElementById('subtitle').textContent = 'PRODUTOS NOVOS · LANÇAMENTOS';
+        render();
+        return;
+      }
+      document.getElementById('content').innerHTML =
+        '<div class="text-center py-20 font-black uppercase tracking-[0.2em] text-red-700">⚠ ERRO: ' + (err.message || err) + '</div>';
     }
 
+    // ============ NAVIGATION ============
     function setBrand(brand) {
       currentBrand = brand;
-      const apple = document.getElementById('btn-apple');
-      const xiaomi = document.getElementById('btn-xiaomi');
-      if (brand === 'apple') {
-        apple.classList.add('bg-yellow'); apple.classList.remove('bg-white');
-        xiaomi.classList.add('bg-white'); xiaomi.classList.remove('bg-yellow');
-      } else {
-        xiaomi.classList.add('bg-yellow'); xiaomi.classList.remove('bg-white');
-        apple.classList.add('bg-white'); apple.classList.remove('bg-yellow');
-      }
+      const btns = {
+        apple:  document.getElementById('btn-apple'),
+        xiaomi: document.getElementById('btn-xiaomi'),
+        novos:  document.getElementById('btn-novos'),
+      };
+      Object.keys(btns).forEach(k => {
+        if (k === brand) {
+          btns[k].classList.add('bg-yellow');
+          btns[k].classList.remove('bg-white');
+        } else {
+          btns[k].classList.add('bg-white');
+          btns[k].classList.remove('bg-yellow');
+        }
+      });
       document.getElementById('search').value = '';
+      // Subtitle muda em NOVOS
+      if (brand === 'novos') {
+        document.getElementById('subtitle').textContent = 'PRODUTOS NOVOS · LANÇAMENTOS';
+      } else if (data.month) {
+        document.getElementById('subtitle').textContent =
+          'ESTOQUE ' + data.month + ' · ATUALIZADO ' + data.lastUpdate;
+      }
       render();
     }
 
+    // ============ RENDER ============
     function render() {
+      if (currentBrand === 'novos') {
+        renderNovos();
+      } else {
+        renderSeminovos();
+      }
+    }
+
+    function renderSeminovos() {
       const list = data[currentBrand] || [];
       const search = document.getElementById('search').value.trim().toLowerCase();
       const filtered = search
         ? list.filter(it => (it.modelo + ' ' + it.cor).toLowerCase().includes(search))
         : list;
 
-      const grid = document.getElementById('grid');
+      const content = document.getElementById('content');
       const count = document.getElementById('count');
 
       if (filtered.length === 0) {
         count.textContent = '';
-        grid.innerHTML = '<div class="col-span-full text-center py-20 font-black uppercase tracking-[0.2em] text-ink/40">' +
+        content.innerHTML = '<div class="text-center py-20 font-black uppercase tracking-[0.2em] text-ink/40">' +
           (search ? 'Nenhum produto encontrado' : 'Nenhum produto em estoque') +
           '</div>';
         return;
@@ -183,23 +307,61 @@
         : filtered.length;
 
       count.textContent = totalUnits + (totalUnits === 1 ? ' UNIDADE DISPONÍVEL' : ' UNIDADES DISPONÍVEIS');
-      grid.innerHTML = filtered.map((item, i) => card(item, i)).join('');
+      content.innerHTML =
+        '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6 lg:gap-7">' +
+        filtered.map((item, i) => cardSeminovo(item, i)).join('') +
+        '</div>';
     }
 
-    // Geometric corner decorations (rotated by index)
+    function renderNovos() {
+      const search = document.getElementById('search').value.trim().toLowerCase();
+      const filtered = search
+        ? NOVOS_DATA.filter(it => (it.modelo + ' ' + it.categoria).toLowerCase().includes(search))
+        : NOVOS_DATA;
+
+      const content = document.getElementById('content');
+      const count = document.getElementById('count');
+
+      if (filtered.length === 0) {
+        count.textContent = '';
+        content.innerHTML = '<div class="text-center py-20 font-black uppercase tracking-[0.2em] text-ink/40">Nenhum produto encontrado</div>';
+        return;
+      }
+
+      count.textContent = filtered.length + ' PRODUTOS NOVOS DISPONÍVEIS';
+
+      // Agrupa por categoria
+      const grouped = {};
+      filtered.forEach(it => {
+        if (!grouped[it.categoria]) grouped[it.categoria] = [];
+        grouped[it.categoria].push(it);
+      });
+
+      // Renderiza por ordem das categorias
+      let html = '';
+      CATEGORIA_ORDER.forEach(cat => {
+        if (!grouped[cat]) return;
+        html += '<section class="mb-10 sm:mb-14">' +
+          '<h2 class="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tighter mb-4 sm:mb-6 inline-block px-4 py-2 bg-ink text-yellow">' + cat + '</h2>' +
+          '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6 lg:gap-7">' +
+          grouped[cat].map((item, i) => cardNovo(item, i)).join('') +
+          '</div>' +
+        '</section>';
+      });
+      content.innerHTML = html;
+    }
+
+    // ============ CARD: SEMINOVO ============
     function corner(i) {
       const variants = [
-        // Yellow circle
         '<div class="absolute -top-2.5 -right-2.5 w-5 h-5 bg-yellow border-2 border-ink rounded-full"></div>',
-        // Blue square
         '<div class="absolute -top-2.5 -right-2.5 w-5 h-5 bg-blue border-2 border-ink"></div>',
-        // Yellow triangle
         '<svg class="absolute -top-2.5 -right-2.5 w-6 h-6" viewBox="0 0 20 20"><polygon points="10,1 19,18 1,18" fill="#F0C020" stroke="#121212" stroke-width="2" stroke-linejoin="round"/></svg>',
       ];
       return variants[i % variants.length];
     }
 
-    function card(item, i) {
+    function cardSeminovo(item, i) {
       const isApple = item.brand === 'apple';
       const meta = isApple
         ? capitalize(item.cor) + (item.bateria !== null ? ' · BAT ' + item.bateria + '%' : '')
@@ -209,8 +371,10 @@
         ? '<span class="inline-flex items-center self-start bg-blue text-white px-2.5 py-1 text-[10px] font-black uppercase tracking-wider border-2 border-ink mb-3">✓ ' + item.quantity + ' unid.</span>'
         : '';
 
-      const wppMsg = buildWhatsAppMessage(item);
-      const wppLink = 'https://wa.me/' + data.whatsapp + '?text=' + encodeURIComponent(wppMsg);
+      const wppMsg = 'Olá! Tenho interesse no ' + item.modelo + ' ' + capitalize(item.cor) +
+                     (isApple && item.bateria !== null ? ' (Bateria ' + item.bateria + '%)' : '') +
+                     '. Pode me passar o valor?\n\nRef: ' + item.code;
+      const wppLink = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(wppMsg);
 
       return '' +
         '<article class="lift relative bg-white border-2 sm:border-4 border-ink shadow-[6px_6px_0px_0px_#121212] sm:shadow-[8px_8px_0px_0px_#121212] p-5 sm:p-6 flex flex-col">' +
@@ -219,20 +383,51 @@
           '<p class="text-xs sm:text-sm font-bold uppercase tracking-wider text-ink/70 mb-3">' + escapeHtml(meta) + '</p>' +
           qtyBadge +
           '<p class="text-[10px] font-mono text-ink/30 mt-auto mb-4 tracking-wider">REF: ' + escapeHtml(item.code) + '</p>' +
-          '<a href="' + wppLink + '" target="_blank" rel="noopener" ' +
-            'class="press bg-[#25D366] text-white border-2 sm:border-[3px] border-ink shadow-[4px_4px_0px_0px_#121212] py-2.5 sm:py-3 px-4 text-center font-black uppercase tracking-wider text-sm flex items-center justify-center gap-2">' +
-            '<svg viewBox="0 0 24 24" class="w-4 h-4 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>' +
-            'Falar no WhatsApp' +
-          '</a>' +
+          whatsappBtn(wppLink) +
         '</article>';
     }
 
-    function buildWhatsAppMessage(item) {
-      const isApple = item.brand === 'apple';
-      const battery = isApple && item.bateria !== null ? ' (Bateria ' + item.bateria + '%)' : '';
-      const desc = item.modelo + ' ' + capitalize(item.cor) + battery;
-      return 'Olá! Tenho interesse no ' + desc +
-             '. Pode me passar o valor?\n\nRef: ' + item.code;
+    // ============ CARD: NOVO ============
+    function cardNovo(item, i) {
+      const precoFTM = calcularPrecoNovo(item);
+      const economia = calcularEconomia(item.precoApple, precoFTM);
+
+      const wppMsg = 'Olá! Tenho interesse no ' + item.modelo + ' (NOVO/LACRADO). Vi por R$ ' + formatBR(precoFTM) + '. Está disponível?';
+      const wppLink = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(wppMsg);
+
+      let priceBlock;
+      if (economia) {
+        priceBlock = '' +
+          '<p class="text-xs font-bold uppercase tracking-wider text-ink/50 line-through mb-1">Apple Store R$ ' + formatBR(item.precoApple) + '</p>' +
+          '<p class="text-3xl sm:text-4xl font-black tracking-tighter mb-3 leading-none">R$ ' + formatBR(precoFTM) + '</p>' +
+          '<div class="bg-yellow border-2 border-ink py-2 px-3 mb-4 text-center">' +
+            '<p class="text-[10px] sm:text-xs font-black uppercase tracking-wider leading-tight">Economize R$ ' + formatBR(economia.economia) + '</p>' +
+            '<p class="text-base sm:text-lg font-black tracking-tight leading-none">' + economia.percent + '% OFF</p>' +
+          '</div>';
+      } else {
+        priceBlock = '' +
+          '<p class="text-[10px] font-bold uppercase tracking-wider text-blue mb-1">Modelo descontinuado pela Apple</p>' +
+          '<p class="text-3xl sm:text-4xl font-black tracking-tighter mb-4 leading-none">R$ ' + formatBR(precoFTM) + '</p>';
+      }
+
+      return '' +
+        '<article class="lift relative bg-white border-2 sm:border-4 border-ink shadow-[6px_6px_0px_0px_#121212] sm:shadow-[8px_8px_0px_0px_#121212] p-5 sm:p-6 flex flex-col">' +
+          corner(i) +
+          '<h3 class="text-lg sm:text-xl font-black uppercase leading-tight tracking-tight mb-3">' + escapeHtml(item.modelo) + '</h3>' +
+          priceBlock +
+          '<div class="mt-auto">' +
+          whatsappBtn(wppLink) +
+          '</div>' +
+        '</article>';
+    }
+
+    // ============ HELPERS ============
+    function whatsappBtn(href) {
+      return '<a href="' + href + '" target="_blank" rel="noopener" ' +
+        'class="press bg-[#25D366] text-white border-2 sm:border-[3px] border-ink shadow-[4px_4px_0px_0px_#121212] py-2.5 sm:py-3 px-4 text-center font-black uppercase tracking-wider text-sm flex items-center justify-center gap-2">' +
+        '<svg viewBox="0 0 24 24" class="w-4 h-4 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>' +
+        'Falar no WhatsApp' +
+        '</a>';
     }
 
     function capitalize(s) {
