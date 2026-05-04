@@ -1,7 +1,9 @@
 {
   "redirects": [
     { "source": "/", "destination": "/ftmimports", "permanent": false },
-    { "source": "/ftmimports/macbook-air-m5/:path*", "destination": "/ftmimports/blog/macbook-air-m5/:path*", "permanent": true }
+    { "source": "/ftmimports/macbook-air-m5", "destination": "/ftmimports/blog/macbook-air-m5", "permanent": true },
+    { "source": "/ftmimports/macbook-air-m5/", "destination": "/ftmimports/blog/macbook-air-m5/", "permanent": true },
+    { "source": "/ftmimports/macbook-air-m5/:path+", "destination": "/ftmimports/blog/macbook-air-m5/:path+", "permanent": true }
   ],
   "cleanUrls": true
 }
