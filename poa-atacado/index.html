@@ -37,6 +37,13 @@
     }
     .arrow-open { transform: rotate(180deg); }
     .menu-arrow { transition: transform .2s ease-out; display: inline-block; }
+    .modal-overlay { animation: fadeIn .2s ease-out; }
+    .modal-content { animation: popIn .3s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(-20px) scale(0.92); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
   </style>
 </head>
 <body class="min-h-screen bg-bg text-ink">
@@ -120,6 +127,29 @@
       </button>
     </div>
   </footer>
+
+  <!-- ============ VOLUME MODAL (popup desconto 10+ unidades) ============ -->
+  <div id="volume-modal" class="hidden fixed inset-0 z-[100] bg-black/70 modal-overlay flex items-center justify-center p-4" onclick="if(event.target===this)closeVolume()">
+    <div class="modal-content bg-yellow border-4 border-ink shadow-[12px_12px_0px_0px_#121212] max-w-md w-full p-6 sm:p-8 relative">
+      <button onclick="closeVolume()"
+              class="absolute -top-4 -right-4 w-10 h-10 bg-ink text-white border-2 border-ink rounded-full flex items-center justify-center font-black text-lg hover:bg-ink/90">
+        ✕
+      </button>
+
+      <p class="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] mb-2 opacity-70">⚡ Volume</p>
+      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tighter mb-3 leading-[0.9]">
+        Desconto pra compras a partir de 10 unidades
+      </h2>
+      <p class="text-sm sm:text-base font-bold tracking-wide mb-6 opacity-90">
+        Compras a partir de <strong>10 unidades</strong> têm <strong>desconto especial</strong>. Fale com a gente pra negociar a tabela.
+      </p>
+      <a href="#" id="volume-cta" target="_blank" rel="noopener" onclick="closeVolume()"
+         class="press flex items-center justify-center gap-2 bg-wpp text-white border-2 border-ink shadow-[4px_4px_0px_0px_#121212] py-3.5 px-6 font-black uppercase tracking-wider text-sm sm:text-base">
+        <svg viewBox="0 0 24 24" class="w-5 h-5 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        Negociar no WhatsApp
+      </a>
+    </div>
+  </div>
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrcXMa7mxzOLhikg9E4MxvjQMtLNawa8HIgUlRc46KIHFCcl3w4eYUBTil6prxEtzM/exec';
@@ -505,11 +535,15 @@
       const wppMsg = preco
         ? 'Olá! Sou lojista. Tenho interesse no ' + item.modelo + ' ' + capitalize(item.cor) +
           (isApple && item.bateria !== null ? ' (Bateria ' + item.bateria + '%)' : '') +
-          '. Vi por R$ ' + formatBR(preco) + ' no Pix. Posso fechar?'
+          '. Vi por R$ ' + formatBR(preco) + ' no Pix. Posso fechar?\n\nRef: ' + (item.code || '')
         : 'Olá! Sou lojista. Tenho interesse no ' + item.modelo + ' ' + capitalize(item.cor) +
-          '. Pode me passar o valor de atacado no Pix?';
+          '. Pode me passar o valor de atacado no Pix?\n\nRef: ' + (item.code || '');
 
       const wppLink = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(wppMsg);
+
+      const refLine = item.code
+        ? '<p class="text-[10px] font-mono text-ink/30 mb-3 tracking-wider">REF: ' + escapeHtml(item.code) + '</p>'
+        : '';
 
       return '' +
         '<article class="lift relative bg-white border-2 sm:border-4 border-ink shadow-[6px_6px_0px_0px_#121212] sm:shadow-[8px_8px_0px_0px_#121212] p-5 sm:p-6 flex flex-col">' +
@@ -517,6 +551,7 @@
           '<h3 class="text-lg sm:text-xl font-black uppercase leading-tight tracking-tight mb-1.5">' + escapeHtml(item.modelo) + '</h3>' +
           '<p class="text-xs sm:text-sm font-bold uppercase tracking-wider text-ink/70 mb-3">' + escapeHtml(meta) + '</p>' +
           qtyBadge +
+          refLine +
           '<div class="mt-auto">' +
           precoBlock +
           whatsappBtn(wppLink) +
@@ -577,10 +612,36 @@
       return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
+    // ============ VOLUME POPUP (desconto 10+ unidades) ============
+    function maybeShowVolume() {
+      try {
+        if (localStorage.getItem('poa-volume-shown') === '1') return;
+      } catch (e) { return; }
+
+      const wppLink = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(
+        'Olá! Sou lojista. Tenho interesse em comprar 10 ou mais unidades. Pode me passar a tabela de desconto pra volume?'
+      );
+      document.getElementById('volume-cta').href = wppLink;
+
+      setTimeout(() => {
+        document.getElementById('volume-modal').classList.remove('hidden');
+      }, 2500);
+    }
+
+    function closeVolume() {
+      document.getElementById('volume-modal').classList.add('hidden');
+      try { localStorage.setItem('poa-volume-shown', '1'); } catch (e) {}
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeVolume();
+    });
+
     // ============ INIT ============
     load();
     setInterval(() => load(false), 60000);
     startCollapseTimer();
+    maybeShowVolume();
   </script>
 </body>
 </html>
