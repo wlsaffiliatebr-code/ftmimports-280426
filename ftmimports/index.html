@@ -194,7 +194,9 @@
 
     function calcularPrecoNovo(item) {
       const margem = MARGENS[item.categoria] || 0.20;
-      return roundUp(item.custo * (1 + margem));
+      // Frete de R$ 100 acrescido no custo (exceto AirTag, que ficaria caro demais)
+      const frete = item.categoria === 'AirTag' ? 0 : 100;
+      return roundUp((item.custo + frete) * (1 + margem));
     }
 
     // Mapeia produto pra URL da página oficial da Apple BR
