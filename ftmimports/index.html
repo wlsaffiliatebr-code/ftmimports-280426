@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FTM Imports · Estoque de Celulares</title>
-  <meta name="description" content="Estoque atualizado em tempo real de iPhones, Androids, iPads, MacBooks, Apple Watch e mais. Atendimento via WhatsApp.">
-  <meta property="og:title" content="FTM Imports · Estoque de Celulares">
-  <meta property="og:description" content="Atualizado em tempo real · Apple e Android · Lançamentos com preço de importação">
+  <title>FTM Imports · Estoque em Tempo Real</title>
+  <meta name="description" content="FTM Imports — Apple, iPhones seminovos e Android. Estoque atualizado em tempo real. Atendimento via WhatsApp.">
+  <meta property="og:title" content="FTM Imports · Estoque em Tempo Real">
+  <meta property="og:description" content="Apple, iPhones seminovos e Android · Atualizado em tempo real">
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,6 +23,8 @@
             ink: '#121212',
             blue: '#1040C0',
             yellow: '#F0C020',
+            wpp: '#25D366',
+            money: '#00A650',
           }
         }
       }
@@ -38,45 +40,69 @@
       background-image: radial-gradient(#12121215 1.5px, transparent 1.5px);
       background-size: 18px 18px;
     }
+    /* Modal animations */
+    .modal-overlay { animation: fadeIn .2s ease-out; }
+    .modal-content { animation: popIn .3s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(-20px) scale(0.92); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    /* Dropdown rotação suave do arrow */
+    .arrow-open { transform: rotate(180deg); }
+    .menu-arrow { transition: transform .2s ease-out; display: inline-block; }
   </style>
 </head>
 <body class="min-h-screen bg-bg text-ink">
 
   <!-- ============ HEADER ============ -->
-  <header class="bg-white border-b-4 border-ink sticky top-0 z-50 dot-grid">
+  <header class="bg-white border-b-4 border-ink sticky top-0 z-40 dot-grid">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
 
+      <!-- Logo + Brand title -->
       <div class="flex items-center gap-4 sm:gap-6 mb-4 sm:mb-6">
         <a href="/" class="flex-shrink-0">
           <img src="/ftmimports/img/logo.png" alt="FTM Imports" class="h-16 sm:h-20 lg:h-24 w-auto" />
         </a>
         <div class="flex-1 min-w-0">
-          <h1 class="text-2xl sm:text-3xl lg:text-5xl font-black uppercase leading-[0.9] tracking-tighter">
-            Estoque de<br>Celulares
+          <h1 class="text-3xl sm:text-4xl lg:text-6xl font-black uppercase leading-[0.9] tracking-tighter">
+            FTM Imports
           </h1>
           <p class="text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] mt-1 sm:mt-2 text-ink/70" id="subtitle">
-            Atualizado em tempo real
+            Estoque em tempo real
           </p>
         </div>
       </div>
 
-      <!-- Toggle: Apple Seminovos / Apple Novos / Android Novos -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 mb-3 sm:mb-4">
-        <button id="btn-apple" onclick="setBrand('apple')"
-                class="press bg-yellow text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 px-2 sm:px-3 font-black uppercase tracking-[0.1em] text-xs sm:text-sm">
-          Apple <span class="text-[10px] sm:text-[11px] opacity-70">(Seminovos)</span>
+      <!-- Menu dropdown collapsible -->
+      <div class="relative mb-3 sm:mb-4">
+        <button id="menu-trigger" onclick="toggleMenu(event)"
+                class="press w-full bg-yellow text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 px-4 flex items-center justify-between gap-3">
+          <div class="flex-1 text-left">
+            <p class="text-[9px] sm:text-[10px] font-bold opacity-60 uppercase tracking-[0.2em] leading-tight mb-0.5">Você está em</p>
+            <p id="current-label" class="text-sm sm:text-base font-black uppercase tracking-tight leading-none">Apple (Seminovos)</p>
+          </div>
+          <span id="menu-arrow" class="menu-arrow text-lg sm:text-xl font-black flex-shrink-0">▼</span>
         </button>
-        <button id="btn-novos" onclick="setBrand('novos')"
-                class="press bg-white text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 px-2 sm:px-3 font-black uppercase tracking-[0.1em] text-xs sm:text-sm">
-          Apple <span class="text-[10px] sm:text-[11px] opacity-70">(Novos)</span>
-        </button>
-        <button id="btn-xiaomi" onclick="setBrand('xiaomi')"
-                class="press bg-white text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 px-2 sm:px-3 font-black uppercase tracking-[0.1em] text-xs sm:text-sm">
-          Android <span class="text-[10px] sm:text-[11px] opacity-70">(Novos)</span>
-        </button>
+
+        <div id="menu-dropdown" class="hidden mt-2 bg-white border-2 sm:border-4 border-ink shadow-[4px_4px_0px_0px_#121212] sm:shadow-[6px_6px_0px_0px_#121212]">
+          <button onclick="setBrand('apple')"  class="press block w-full text-left px-5 py-4 font-black uppercase tracking-[0.15em] text-sm hover:bg-yellow border-b-2 border-ink/10">
+            Apple <span class="opacity-60">(Seminovos)</span>
+          </button>
+          <button onclick="setBrand('novos')"  class="press block w-full text-left px-5 py-4 font-black uppercase tracking-[0.15em] text-sm hover:bg-yellow border-b-2 border-ink/10">
+            Apple <span class="opacity-60">(Novos)</span>
+          </button>
+          <button onclick="setBrand('xiaomi')" class="press block w-full text-left px-5 py-4 font-black uppercase tracking-[0.15em] text-sm hover:bg-yellow">
+            Android <span class="opacity-60">(Novos)</span>
+          </button>
+        </div>
       </div>
 
-      <div id="search-wrap" class="relative">
+      <!-- Search -->
+      <div class="relative">
         <input type="search" id="search" oninput="render()"
                placeholder="BUSCAR MODELO, COR..."
                class="w-full px-4 py-2.5 sm:py-3 bg-white border-2 sm:border-4 border-ink font-bold uppercase tracking-wide text-sm sm:text-base placeholder:text-ink/40 focus:outline-none focus:shadow-[4px_4px_0px_0px_#121212] transition-shadow">
@@ -88,9 +114,7 @@
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
     <div id="count" class="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] mb-4 sm:mb-6"></div>
     <div id="content">
-      <div class="text-center py-20 font-black uppercase tracking-[0.2em] text-ink/40">
-        Carregando estoque...
-      </div>
+      <div class="text-center py-20 font-black uppercase tracking-[0.2em] text-ink/40">Carregando estoque...</div>
     </div>
   </main>
 
@@ -104,13 +128,42 @@
     </div>
   </footer>
 
+  <!-- ============ TRADE-IN MODAL (popup primeira visita) ============ -->
+  <div id="trade-in-modal" class="hidden fixed inset-0 z-[100] bg-black/70 modal-overlay flex items-center justify-center p-4" onclick="if(event.target===this)closeTradeIn()">
+    <div class="modal-content bg-yellow border-4 border-ink shadow-[12px_12px_0px_0px_#121212] max-w-md w-full p-6 sm:p-8 relative">
+      <button onclick="closeTradeIn()"
+              class="absolute -top-4 -right-4 w-10 h-10 bg-ink text-white border-2 border-ink rounded-full flex items-center justify-center font-black text-lg hover:bg-ink/90">
+        ✕
+      </button>
+
+      <p class="text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] mb-2 opacity-70">⚡ Oferta especial</p>
+      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tighter mb-3 leading-[0.9]">
+        Trocamos seu aparelho usado
+      </h2>
+      <p class="text-sm sm:text-base font-bold tracking-wide mb-6 opacity-90">
+        Aceitamos seu <strong>iPhone</strong> ou <strong>MacBook</strong> como parte do pagamento na compra de qualquer produto novo. Avaliação rápida pelo WhatsApp.
+      </p>
+      <a href="#" id="trade-in-cta" target="_blank" rel="noopener" onclick="closeTradeIn()"
+         class="press flex items-center justify-center gap-2 bg-wpp text-white border-2 border-ink shadow-[4px_4px_0px_0px_#121212] py-3.5 px-6 font-black uppercase tracking-wider text-sm sm:text-base">
+        <svg viewBox="0 0 24 24" class="w-5 h-5 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        Avaliar no WhatsApp
+      </a>
+    </div>
+  </div>
+
   <!-- ============ SCRIPT ============ -->
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbzrcXMa7mxzOLhikg9E4MxvjQMtLNawa8HIgUlRc46KIHFCcl3w4eYUBTil6prxEtzM/exec';
     const WHATSAPP = '5551992677191';
 
+    // Labels do menu
+    const BRAND_LABELS = {
+      'apple':  'Apple <span class="opacity-60">(Seminovos)</span>',
+      'novos':  'Apple <span class="opacity-60">(Novos)</span>',
+      'xiaomi': 'Android <span class="opacity-60">(Novos)</span>',
+    };
+
     // ============ DADOS DOS PRODUTOS NOVOS ============
-    // custo = preço de custo (interno), precoApple = preço oficial Apple Brasil (null se descontinuado)
     const NOVOS_DATA = [
       // iPhones (margem 10%)
       { modelo: 'iPhone 13 128GB',          categoria: 'iPhone',      custo: 3290, precoApple: null },
@@ -162,21 +215,16 @@
       { modelo: 'AirPods 4',      categoria: 'AirPods', custo: 650,  precoApple: 1499 },
       { modelo: 'AirPods Max 2',  categoria: 'AirPods', custo: 3600, precoApple: 6590 },
 
-      // AirTag (margem 50%)
+      // AirTag (margem 50%, sem frete)
       { modelo: 'AirTag 1uni',  categoria: 'AirTag', custo: 150, precoApple: 449 },
       { modelo: 'AirTag 4uni',  categoria: 'AirTag', custo: 450, precoApple: 1599 },
     ];
 
     const MARGENS = {
-      'iPhone':      0.10,
-      'iPad':        0.20,
-      'MacBook':     0.20,
-      'Apple Watch': 0.25,
-      'AirPods':     0.30,
-      'AirTag':      0.50,
+      'iPhone': 0.10, 'iPad': 0.20, 'MacBook': 0.20,
+      'Apple Watch': 0.25, 'AirPods': 0.30, 'AirTag': 0.50,
     };
 
-    // Ordem das categorias (mais caro/popular primeiro)
     const CATEGORIA_ORDER = ['iPhone', 'iPad', 'MacBook', 'Apple Watch', 'AirPods', 'AirTag'];
 
     // ============ ESTADO ============
@@ -184,27 +232,24 @@
     let currentBrand = 'apple';
 
     // ============ PRICE CALCULATION ============
-    function roundUp(value) {
-      const remainder = value % 100;
-      const base = value - remainder;
-      if (remainder <= 40) return base + 40;
-      if (remainder <= 90) return base + 90;
-      return base + 100 + 40;
-    }
-
     function calcularPrecoNovo(item) {
       const margem = MARGENS[item.categoria] || 0.20;
-      // Frete fixo de R$ 100 (exceto AirTag). Margem aplica antes do frete.
       const frete = item.categoria === 'AirTag' ? 0 : 100;
       return item.custo * (1 + margem) + frete;
     }
 
-    // Calcula valor da parcela: preço de venda + 15% (taxa cartão) / 12, sem centavos
     function calcularParcela(precoVenda) {
       return Math.floor(precoVenda * 1.15 / 12);
     }
 
-    // Mapeia produto pra URL da página oficial da Apple BR
+    function calcularEconomia(precoApple, precoFTM) {
+      if (!precoApple) return null;
+      const economia = Math.round(precoApple - precoFTM);
+      if (economia <= 0) return null;
+      const percent = Math.round((economia / precoApple) * 100);
+      return { economia, percent };
+    }
+
     function getAppleUrl(item) {
       const cat = item.categoria;
       const m = item.modelo.toLowerCase();
@@ -238,21 +283,11 @@
       return null;
     }
 
-    function calcularEconomia(precoApple, precoFTM) {
-      if (!precoApple) return null;
-      const economia = precoApple - precoFTM;
-      const percent = Math.round((economia / precoApple) * 100);
-      return { economia, percent };
-    }
-
     function formatBR(n) {
-      return Number(n).toLocaleString('pt-BR', {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-      });
+      return Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
     }
 
-    // ============ LOAD SEMINOVOS DATA ============
+    // ============ LOAD ============
     async function load(showSpinner) {
       if (showSpinner && currentBrand !== 'novos') {
         document.getElementById('content').innerHTML =
@@ -270,17 +305,15 @@
 
     function onLoad(result) {
       data = result;
-      document.getElementById('subtitle').textContent =
-        'ESTOQUE ' + result.month + ' · ATUALIZADO ' + result.lastUpdate;
+      updateSubtitle();
       document.getElementById('footerText').textContent =
         'Atualização automática a cada 60s · Última: ' + result.lastUpdate;
       render();
     }
 
     function onError(err) {
-      // Não bloqueia se estamos em modo NOVOS (dados são locais)
       if (currentBrand === 'novos') {
-        document.getElementById('subtitle').textContent = 'PRODUTOS NOVOS · LANÇAMENTOS';
+        updateSubtitle();
         render();
         return;
       }
@@ -288,41 +321,56 @@
         '<div class="text-center py-20 font-black uppercase tracking-[0.2em] text-red-700">⚠ ERRO: ' + (err.message || err) + '</div>';
     }
 
-    // ============ NAVIGATION ============
+    function updateSubtitle() {
+      const sub = document.getElementById('subtitle');
+      if (currentBrand === 'novos') {
+        sub.textContent = 'Apple novos · Lançamentos com preço de importação';
+      } else if (data.month) {
+        sub.textContent = 'Estoque ' + data.month + ' · Atualizado ' + data.lastUpdate;
+      }
+    }
+
+    // ============ MENU ============
+    function toggleMenu(e) {
+      if (e) e.stopPropagation();
+      const dd = document.getElementById('menu-dropdown');
+      const arrow = document.getElementById('menu-arrow');
+      if (dd.classList.contains('hidden')) {
+        dd.classList.remove('hidden');
+        arrow.classList.add('arrow-open');
+      } else {
+        dd.classList.add('hidden');
+        arrow.classList.remove('arrow-open');
+      }
+    }
+
+    function closeMenu() {
+      document.getElementById('menu-dropdown').classList.add('hidden');
+      document.getElementById('menu-arrow').classList.remove('arrow-open');
+    }
+
+    document.addEventListener('click', (e) => {
+      const trigger = document.getElementById('menu-trigger');
+      const dd = document.getElementById('menu-dropdown');
+      if (trigger && dd && !trigger.contains(e.target) && !dd.contains(e.target)) {
+        closeMenu();
+      }
+    });
+
     function setBrand(brand) {
       currentBrand = brand;
-      const btns = {
-        apple:  document.getElementById('btn-apple'),
-        xiaomi: document.getElementById('btn-xiaomi'),
-        novos:  document.getElementById('btn-novos'),
-      };
-      Object.keys(btns).forEach(k => {
-        if (k === brand) {
-          btns[k].classList.add('bg-yellow');
-          btns[k].classList.remove('bg-white');
-        } else {
-          btns[k].classList.add('bg-white');
-          btns[k].classList.remove('bg-yellow');
-        }
-      });
+      document.getElementById('current-label').innerHTML = BRAND_LABELS[brand];
+      closeMenu();
       document.getElementById('search').value = '';
-      // Subtitle muda em NOVOS
-      if (brand === 'novos') {
-        document.getElementById('subtitle').textContent = 'PRODUTOS NOVOS · LANÇAMENTOS';
-      } else if (data.month) {
-        document.getElementById('subtitle').textContent =
-          'ESTOQUE ' + data.month + ' · ATUALIZADO ' + data.lastUpdate;
-      }
+      updateSubtitle();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       render();
     }
 
     // ============ RENDER ============
     function render() {
-      if (currentBrand === 'novos') {
-        renderNovos();
-      } else {
-        renderSeminovos();
-      }
+      if (currentBrand === 'novos') renderNovos();
+      else renderSeminovos();
     }
 
     function renderSeminovos() {
@@ -338,8 +386,7 @@
       if (filtered.length === 0) {
         count.textContent = '';
         content.innerHTML = '<div class="text-center py-20 font-black uppercase tracking-[0.2em] text-ink/40">' +
-          (search ? 'Nenhum produto encontrado' : 'Nenhum produto em estoque') +
-          '</div>';
+          (search ? 'Nenhum produto encontrado' : 'Nenhum produto em estoque') + '</div>';
         return;
       }
 
@@ -371,32 +418,13 @@
 
       count.textContent = filtered.length + ' PRODUTOS NOVOS DISPONÍVEIS';
 
-      // Agrupa por categoria
       const grouped = {};
       filtered.forEach(it => {
         if (!grouped[it.categoria]) grouped[it.categoria] = [];
         grouped[it.categoria].push(it);
       });
 
-      // Banner de troca-troca no topo
-      const tradeInMsg = encodeURIComponent('Olá! Gostaria de avaliar meu aparelho usado para usar como parte do pagamento de um produto novo. É um [iPhone/MacBook/...]. Pode me ajudar?');
-      let html = '' +
-        '<section class="bg-yellow border-2 sm:border-4 border-ink shadow-[6px_6px_0px_0px_#121212] sm:shadow-[8px_8px_0px_0px_#121212] p-5 sm:p-6 mb-8 sm:mb-10 flex flex-col sm:flex-row items-center gap-4 sm:gap-6">' +
-          '<div class="flex-1 text-center sm:text-left">' +
-            '<h3 class="text-xl sm:text-2xl lg:text-3xl font-black uppercase tracking-tighter leading-[0.95] mb-2">' +
-              '⚡ Trocamos seu aparelho usado' +
-            '</h3>' +
-            '<p class="text-xs sm:text-sm font-bold uppercase tracking-wider opacity-80">' +
-              'Aceitamos iPhone ou MacBook como parte do pagamento' +
-            '</p>' +
-          '</div>' +
-          '<a href="https://wa.me/' + WHATSAPP + '?text=' + tradeInMsg + '" target="_blank" rel="noopener" ' +
-             'class="press flex-shrink-0 bg-ink text-yellow border-2 border-ink shadow-[4px_4px_0px_0px_#121212] py-3 px-5 sm:px-6 font-black uppercase tracking-wider text-xs sm:text-sm whitespace-nowrap">' +
-            'Avaliar no WhatsApp' +
-          '</a>' +
-        '</section>';
-
-      // Renderiza por ordem das categorias
+      let html = '';
       CATEGORIA_ORDER.forEach(cat => {
         if (!grouped[cat]) return;
         html += '<section class="mb-10 sm:mb-14">' +
@@ -409,7 +437,7 @@
       content.innerHTML = html;
     }
 
-    // ============ CARD: SEMINOVO ============
+    // ============ CORNERS ============
     function corner(i) {
       const variants = [
         '<div class="absolute -top-2.5 -right-2.5 w-5 h-5 bg-yellow border-2 border-ink rounded-full"></div>',
@@ -419,6 +447,19 @@
       return variants[i % variants.length];
     }
 
+    // Badge VERDE de economia (substitui geometric corner nos novos)
+    function cornerNovo(item) {
+      const economia = calcularEconomia(item.precoApple, calcularPrecoNovo(item));
+      if (!economia) return ''; // sem badge se não tem comparação Apple
+      return '' +
+        '<div class="absolute -top-3 -right-3 bg-money text-white border-2 border-ink shadow-[3px_3px_0px_0px_#121212] px-3 py-1.5 z-10 text-center">' +
+          '<p class="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.15em] leading-none mb-0.5 opacity-90">Economize</p>' +
+          '<p class="text-base sm:text-lg font-black tracking-tight leading-none">R$ ' + formatBR(economia.economia) + '</p>' +
+          '<p class="text-[10px] sm:text-[11px] font-black tracking-tight leading-none mt-0.5 opacity-90">' + economia.percent + '% OFF</p>' +
+        '</div>';
+    }
+
+    // ============ CARD: SEMINOVO ============
     function cardSeminovo(item, i) {
       const isApple = item.brand === 'apple';
       const meta = isApple
@@ -451,11 +492,9 @@
       const parcela = calcularParcela(precoFTM);
       const appleUrl = getAppleUrl(item);
 
-      // WhatsApp: cliente pergunta o Pix, mostrando que viu o 12x
       const wppMsg = 'Olá! Tenho interesse no ' + item.modelo + ' (NOVO/LACRADO). Vi por 12x R$ ' + formatBR(parcela) + ' sem juros. Pode me passar o valor no Pix?';
       const wppLink = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(wppMsg);
 
-      // Linha do preço Apple (riscado, link clicável)
       let appleLine;
       if (item.precoApple) {
         appleLine = appleUrl
@@ -465,20 +504,18 @@
         appleLine = '<p class="text-[10px] font-bold uppercase tracking-wider text-blue mb-3">Modelo descontinuado pela Apple</p>';
       }
 
-      // Badge amarelo com a parcela (eye-catcher)
       const parcelaBadge = '' +
         '<div class="bg-yellow border-2 border-ink py-3 px-3 mb-3 text-center">' +
           '<p class="text-2xl sm:text-3xl font-black tracking-tight leading-none">12x R$ ' + formatBR(parcela) + '</p>' +
           '<p class="text-[10px] sm:text-xs font-black uppercase tracking-wider mt-1 leading-tight">SEM JUROS no cartão</p>' +
         '</div>';
 
-      // Linha do Pix (texto pequeno com indicação de consulta)
       const pixLine = '<p class="text-[11px] sm:text-xs text-center text-ink/60 mb-4 font-bold tracking-wider uppercase">💬 Consulte valor especial no Pix</p>';
 
       return '' +
         '<article class="lift relative bg-white border-2 sm:border-4 border-ink shadow-[6px_6px_0px_0px_#121212] sm:shadow-[8px_8px_0px_0px_#121212] p-5 sm:p-6 flex flex-col">' +
-          corner(i) +
-          '<h3 class="text-lg sm:text-xl font-black uppercase leading-tight tracking-tight mb-3">' + escapeHtml(item.modelo) + '</h3>' +
+          cornerNovo(item) +
+          '<h3 class="text-lg sm:text-xl font-black uppercase leading-tight tracking-tight mb-3 pr-16">' + escapeHtml(item.modelo) + '</h3>' +
           appleLine +
           parcelaBadge +
           pixLine +
@@ -491,7 +528,7 @@
     // ============ HELPERS ============
     function whatsappBtn(href) {
       return '<a href="' + href + '" target="_blank" rel="noopener" ' +
-        'class="press bg-[#25D366] text-white border-2 sm:border-[3px] border-ink shadow-[4px_4px_0px_0px_#121212] py-2.5 sm:py-3 px-4 text-center font-black uppercase tracking-wider text-sm flex items-center justify-center gap-2">' +
+        'class="press bg-wpp text-white border-2 sm:border-[3px] border-ink shadow-[4px_4px_0px_0px_#121212] py-2.5 sm:py-3 px-4 text-center font-black uppercase tracking-wider text-sm flex items-center justify-center gap-2">' +
         '<svg viewBox="0 0 24 24" class="w-4 h-4 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>' +
         'Falar no WhatsApp' +
         '</a>';
@@ -503,15 +540,39 @@
     }
 
     function escapeHtml(s) {
-      return String(s)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
+    // ============ TRADE-IN POPUP ============
+    function maybeShowTradeIn() {
+      try {
+        if (localStorage.getItem('ftm-trade-in-shown') === '1') return;
+      } catch (e) { return; }
+
+      const wppLink = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(
+        'Olá! Gostaria de avaliar meu aparelho usado para usar como parte do pagamento de um produto novo. É um [iPhone/MacBook/...]. Pode me ajudar?'
+      );
+      document.getElementById('trade-in-cta').href = wppLink;
+
+      setTimeout(() => {
+        document.getElementById('trade-in-modal').classList.remove('hidden');
+      }, 2500);
+    }
+
+    function closeTradeIn() {
+      document.getElementById('trade-in-modal').classList.add('hidden');
+      try { localStorage.setItem('ftm-trade-in-shown', '1'); } catch (e) {}
+    }
+
+    // Close modal on ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeTradeIn();
+    });
+
+    // ============ INIT ============
     load();
     setInterval(() => load(false), 60000);
+    maybeShowTradeIn();
   </script>
 </body>
 </html>
