@@ -80,22 +80,22 @@
       <!-- Menu dropdown collapsible -->
       <div class="relative mb-3 sm:mb-4">
         <button id="menu-trigger" onclick="toggleMenu(event)"
-                class="press w-full bg-yellow text-ink border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 px-4 flex items-center justify-between gap-3">
+                class="press w-full bg-blue text-white border-2 sm:border-4 border-ink shadow-[3px_3px_0px_0px_#121212] sm:shadow-[4px_4px_0px_0px_#121212] py-3 px-4 flex items-center justify-between gap-3">
           <div class="flex-1 text-left">
-            <p class="text-[9px] sm:text-[10px] font-bold opacity-60 uppercase tracking-[0.2em] leading-tight mb-0.5">Você está em</p>
+            <p class="text-[9px] sm:text-[10px] font-bold opacity-70 uppercase tracking-[0.2em] leading-tight mb-0.5">Você está em</p>
             <p id="current-label" class="text-sm sm:text-base font-black uppercase tracking-tight leading-none">Apple (Seminovos)</p>
           </div>
           <span id="menu-arrow" class="menu-arrow text-lg sm:text-xl font-black flex-shrink-0">▼</span>
         </button>
 
         <div id="menu-dropdown" class="hidden mt-2 bg-white border-2 sm:border-4 border-ink shadow-[4px_4px_0px_0px_#121212] sm:shadow-[6px_6px_0px_0px_#121212]">
-          <button onclick="setBrand('apple')"  class="press block w-full text-left px-5 py-4 font-black uppercase tracking-[0.15em] text-sm hover:bg-yellow border-b-2 border-ink/10">
+          <button data-brand="apple"  onclick="setBrand('apple')"  class="menu-item press block w-full text-left px-5 py-4 font-black uppercase tracking-[0.15em] text-sm hover:bg-yellow border-b-2 border-ink/10">
             Apple <span class="opacity-60">(Seminovos)</span>
           </button>
-          <button onclick="setBrand('novos')"  class="press block w-full text-left px-5 py-4 font-black uppercase tracking-[0.15em] text-sm hover:bg-yellow border-b-2 border-ink/10">
+          <button data-brand="novos"  onclick="setBrand('novos')"  class="menu-item press block w-full text-left px-5 py-4 font-black uppercase tracking-[0.15em] text-sm hover:bg-yellow border-b-2 border-ink/10">
             Apple <span class="opacity-60">(Novos)</span>
           </button>
-          <button onclick="setBrand('xiaomi')" class="press block w-full text-left px-5 py-4 font-black uppercase tracking-[0.15em] text-sm hover:bg-yellow">
+          <button data-brand="xiaomi" onclick="setBrand('xiaomi')" class="menu-item press block w-full text-left px-5 py-4 font-black uppercase tracking-[0.15em] text-sm hover:bg-yellow">
             Android <span class="opacity-60">(Novos)</span>
           </button>
         </div>
@@ -338,10 +338,21 @@
       if (dd.classList.contains('hidden')) {
         dd.classList.remove('hidden');
         arrow.classList.add('arrow-open');
+        updateMenuSelected();
       } else {
         dd.classList.add('hidden');
         arrow.classList.remove('arrow-open');
       }
+    }
+
+    // Marca visualmente o item ativo no dropdown (azul do logo)
+    function updateMenuSelected() {
+      document.querySelectorAll('.menu-item').forEach(b => {
+        const isActive = b.dataset.brand === currentBrand;
+        b.classList.toggle('bg-blue', isActive);
+        b.classList.toggle('text-white', isActive);
+        b.classList.toggle('hover:bg-yellow', !isActive);
+      });
     }
 
     function closeMenu() {
@@ -447,12 +458,12 @@
       return variants[i % variants.length];
     }
 
-    // Badge VERDE de economia (substitui geometric corner nos novos)
+    // Badge AZUL de economia (cor do logo, contrasta com o verde do WhatsApp)
     function cornerNovo(item) {
       const economia = calcularEconomia(item.precoApple, calcularPrecoNovo(item));
       if (!economia) return ''; // sem badge se não tem comparação Apple
       return '' +
-        '<div class="absolute -top-3 -right-3 bg-money text-white border-2 border-ink shadow-[3px_3px_0px_0px_#121212] px-3 py-1.5 z-10 text-center">' +
+        '<div class="absolute -top-3 -right-3 bg-blue text-white border-2 border-ink shadow-[3px_3px_0px_0px_#121212] px-3 py-1.5 z-10 text-center">' +
           '<p class="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.15em] leading-none mb-0.5 opacity-90">Economize</p>' +
           '<p class="text-base sm:text-lg font-black tracking-tight leading-none">R$ ' + formatBR(economia.economia) + '</p>' +
           '<p class="text-[10px] sm:text-[11px] font-black tracking-tight leading-none mt-0.5 opacity-90">' + economia.percent + '% OFF</p>' +
